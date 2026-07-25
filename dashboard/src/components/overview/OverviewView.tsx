@@ -321,11 +321,11 @@ export const OverviewView: React.FC = () => {
                 </ResponsiveContainer>
 
                 {/* Big Number Centered inside Gauge (positioned cleanly below arc with dark slate pill) */}
-                <div className="absolute top-[78%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none bg-[#1E293B] border border-slate-700 px-5 py-2 rounded-2xl shadow-2xl backdrop-blur-md">
-                  <div className="font-display font-extrabold text-3xl sm:text-4xl text-white tracking-tight tabular-nums">
+                <div className="absolute top-[78%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-700 px-5 py-2 rounded-2xl shadow-xl dark:shadow-2xl backdrop-blur-md">
+                  <div className="font-display font-extrabold text-3xl sm:text-4xl text-slate-900 dark:text-white tracking-tight tabular-nums">
                     1,248
                   </div>
-                  <div className="text-xs font-mono font-extrabold text-[#CCFF00] uppercase tracking-wider">
+                  <div className="text-xs font-mono font-extrabold text-teal-700 dark:text-[#CCFF00] uppercase tracking-wider">
                     Active Risk Score
                   </div>
                 </div>
@@ -531,7 +531,7 @@ export const OverviewView: React.FC = () => {
 
               <div>
                 <h3 className="font-display font-bold text-base text-[#FFFFFF]">Commander J. Vance</h3>
-                <p className="text-xs text-teal-400 font-medium">Chief Intelligence Analyst</p>
+                <p className="text-xs text-teal-700 dark:text-teal-400 font-medium">Chief Intelligence Analyst</p>
                 <p className="text-[10px] text-[#9FA4B2] font-mono mt-0.5">Last login: Today at 08:42 AM</p>
               </div>
             </div>
