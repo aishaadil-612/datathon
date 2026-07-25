@@ -30,6 +30,7 @@ import {
   Cell
 } from 'recharts';
 import { useDashboardStore } from '../../store/useDashboardStore';
+import { useRouterStore } from '../../store/useRouterStore';
 import { mockInsights } from '../../mock/insights';
 import { mockFIRs } from '../../mock/fir';
 import { mockAuditLogs } from '../../mock/auditLog';
@@ -72,7 +73,8 @@ const assignedInvestigators = [
 ];
 
 export const OverviewView: React.FC = () => {
-  const { setActiveView, openExplainability, setSelectedCaseId } = useDashboardStore();
+  const { openExplainability, setSelectedCaseId } = useDashboardStore();
+  const { setActiveView } = useRouterStore();
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string | null>(null);
   const [activeSubTab, setActiveSubTab] = useState<'cases' | 'suspects' | 'evidence' | 'timeline'>('cases');
 
@@ -99,11 +101,11 @@ export const OverviewView: React.FC = () => {
     <section id="section-overview" className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-[1700px] mx-auto select-none min-h-screen border-b border-[#22242D]">
       {/* Section Header Narrative Tag */}
       <div className="flex items-center justify-between pt-4">
-        <div className="flex items-center gap-2 text-xs font-mono text-[#CCFF00] bg-[#CCFF00]/10 px-3 py-1 rounded-full border border-[#CCFF00]/20">
-          <Layers className="w-3.5 h-3.5" />
+        <div className="flex items-center gap-2 text-xs font-mono font-extrabold text-[#CCFF00] bg-[#CCFF00]/10 px-3.5 py-1.5 rounded-full border border-[#CCFF00]/30">
+          <Layers className="w-4 h-4" />
           <span>02 — COMMAND OVERVIEW</span>
         </div>
-        <span className="text-xs font-mono text-[#9FA4B2] hidden sm:block">
+        <span className="text-xs sm:text-sm font-mono font-bold text-[#E2E8F0] hidden sm:block">
           Precinct Operational Metrics & Multi-Vector Intelligence Feed
         </span>
       </div>
@@ -112,28 +114,28 @@ export const OverviewView: React.FC = () => {
       {/* ROW 1: PRIMARY KPI TRIO (Active Cases, Open Alerts, Avg Response) */}
       {/* ------------------------------------------------------------- */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
-        {/* KPI 1: Active Cases (Lime Green Card matching reference) */}
+        {/* KPI 1: Active Cases (Lime Green Card) */}
         <motion.div
-          whileHover={{ translateY: -2 }}
+          whileHover={{ translateY: -3, scale: 1.01 }}
           transition={{ duration: 0.15 }}
           className="bg-[#8CBF26] text-[#0B0C0E] rounded-[24px] p-5 sm:p-6 shadow-command transition-all relative overflow-hidden flex flex-col justify-between"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-full bg-[#0B0C0E]/20 text-[#0B0C0E] flex items-center justify-center">
+              <div className="w-11 h-11 rounded-full bg-[#0B0C0E]/20 text-[#0B0C0E] flex items-center justify-center font-bold">
                 <FileText className="w-5 h-5" />
               </div>
               <div>
-                <span className="text-xs font-bold text-[#0B0C0E]/80 uppercase tracking-wider">Active Investigations</span>
-                <p className="text-[11px] text-[#0B0C0E]/70 font-mono">4 High Priority FIRs</p>
+                <span className="text-sm font-extrabold text-[#0B0C0E] uppercase tracking-wider block">Active Investigations</span>
+                <p className="text-xs text-[#0B0C0E] font-mono font-bold">4 High Priority FIRs</p>
               </div>
             </div>
             <button
               onClick={() => setActiveView('search')}
-              className="w-8 h-8 rounded-full bg-[#0B0C0E]/20 text-[#0B0C0E] hover:bg-[#0B0C0E]/30 flex items-center justify-center transition-colors"
+              className="w-9 h-9 rounded-full bg-[#0B0C0E] text-[#8CBF26] hover:bg-[#0B0C0E]/80 flex items-center justify-center transition-colors font-bold shadow-md"
               title="Expand Cases"
             >
-              <ArrowUpRight className="w-4 h-4" />
+              <ArrowUpRight className="w-5 h-5 stroke-[2.5]" />
             </button>
           </div>
 
@@ -141,35 +143,35 @@ export const OverviewView: React.FC = () => {
             <div className="font-display font-extrabold text-3xl sm:text-4xl text-[#0B0C0E] tracking-tight tabular-nums">
               24
             </div>
-            <div className="px-2.5 py-1 rounded-full bg-[#0B0C0E]/20 text-[#0B0C0E] text-xs font-extrabold flex items-center gap-1 font-mono">
-              <TrendingUp className="w-3.5 h-3.5" />
+            <div className="px-3 py-1 rounded-full bg-[#0B0C0E] text-[#8CBF26] text-xs font-extrabold flex items-center gap-1 font-mono shadow-sm">
+              <TrendingUp className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>+12%</span>
             </div>
           </div>
         </motion.div>
 
-        {/* KPI 2: Open Alerts (Warm Amber/Orange Card matching reference) */}
+        {/* KPI 2: Open Alerts (Warm Amber/Orange Card) */}
         <motion.div
-          whileHover={{ translateY: -2 }}
+          whileHover={{ translateY: -3, scale: 1.01 }}
           transition={{ duration: 0.15 }}
           className="bg-[#C66900] text-[#0B0C0E] rounded-[24px] p-5 sm:p-6 shadow-command transition-all relative overflow-hidden flex flex-col justify-between"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-full bg-[#0B0C0E]/20 text-[#0B0C0E] flex items-center justify-center">
+              <div className="w-11 h-11 rounded-full bg-[#0B0C0E]/20 text-[#0B0C0E] flex items-center justify-center font-bold">
                 <AlertTriangle className="w-5 h-5" />
               </div>
               <div>
-                <span className="text-xs font-bold text-[#0B0C0E]/80 uppercase tracking-wider">Open System Alerts</span>
-                <p className="text-[11px] text-[#0B0C0E]/70 font-mono">2 Predicted Hotspots</p>
+                <span className="text-sm font-extrabold text-[#0B0C0E] uppercase tracking-wider block">Open System Alerts</span>
+                <p className="text-xs text-[#0B0C0E] font-mono font-bold">2 Predicted Hotspots</p>
               </div>
             </div>
             <button
-              onClick={() => setActiveView('map')}
-              className="w-8 h-8 rounded-full bg-[#0B0C0E]/20 text-[#0B0C0E] hover:bg-[#0B0C0E]/30 flex items-center justify-center transition-colors"
+              onClick={() => setActiveView('hotspots')}
+              className="w-9 h-9 rounded-full bg-[#0B0C0E] text-[#C66900] hover:bg-[#0B0C0E]/80 flex items-center justify-center transition-colors font-bold shadow-md"
               title="Expand Alerts Map"
             >
-              <ArrowUpRight className="w-4 h-4" />
+              <ArrowUpRight className="w-5 h-5 stroke-[2.5]" />
             </button>
           </div>
 
@@ -177,43 +179,43 @@ export const OverviewView: React.FC = () => {
             <div className="font-display font-extrabold text-3xl sm:text-4xl text-[#0B0C0E] tracking-tight tabular-nums">
               03
             </div>
-            <div className="px-2.5 py-1 rounded-full bg-[#0B0C0E]/20 text-[#0B0C0E] text-xs font-extrabold flex items-center gap-1 font-mono">
+            <div className="px-3 py-1 rounded-full bg-[#0B0C0E] text-[#FFB020] text-xs font-extrabold flex items-center gap-1 font-mono shadow-sm">
               <span>ACTIVE MONITORING</span>
             </div>
           </div>
         </motion.div>
 
-        {/* KPI 3: Avg Response Time (Deep Maroon/Crimson Card matching reference) */}
+        {/* KPI 3: Avg Response Time (Deep Crimson Card) */}
         <motion.div
-          whileHover={{ translateY: -2 }}
+          whileHover={{ translateY: -3, scale: 1.01 }}
           transition={{ duration: 0.15 }}
           className="bg-[#7F1D1D] text-white rounded-[24px] p-5 sm:p-6 shadow-command transition-all relative overflow-hidden flex flex-col justify-between"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-full bg-white/10 text-white flex items-center justify-center">
+              <div className="w-11 h-11 rounded-full bg-white/20 text-white flex items-center justify-center font-bold">
                 <Clock className="w-5 h-5" />
               </div>
               <div>
-                <span className="text-xs font-semibold text-white/80 uppercase tracking-wider">Avg Resolution Time</span>
-                <p className="text-[11px] text-white/70 font-mono">Copilot Pipeline Accelerated</p>
+                <span className="text-sm font-extrabold text-white uppercase tracking-wider block">Avg Resolution Time</span>
+                <p className="text-xs text-white/90 font-mono font-bold">Copilot Pipeline Accelerated</p>
               </div>
             </div>
             <button
               onClick={() => setActiveView('timelines')}
-              className="w-8 h-8 rounded-full bg-white/10 text-white hover:bg-white/20 flex items-center justify-center transition-colors"
+              className="w-9 h-9 rounded-full bg-white text-[#7F1D1D] hover:bg-white/90 flex items-center justify-center transition-colors font-bold shadow-md"
               title="Expand Timelines"
             >
-              <ArrowUpRight className="w-4 h-4" />
+              <ArrowUpRight className="w-5 h-5 stroke-[2.5]" />
             </button>
           </div>
 
           <div className="mt-4 flex items-baseline justify-between">
-            <div className="font-display font-bold text-3xl sm:text-4xl text-white tracking-tight tabular-nums">
-              4.2 <span className="text-lg text-white/80 font-normal">Days</span>
+            <div className="font-display font-extrabold text-3xl sm:text-4xl text-white tracking-tight tabular-nums">
+              4.2 <span className="text-lg text-white/90 font-bold">Days</span>
             </div>
-            <div className="px-2.5 py-1 rounded-full bg-white/10 text-white text-xs font-bold flex items-center gap-1 font-mono">
-              <TrendingDown className="w-3.5 h-3.5" />
+            <div className="px-3 py-1 rounded-full bg-white text-[#7F1D1D] text-xs font-extrabold flex items-center gap-1 font-mono shadow-sm">
+              <TrendingDown className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>-1.8 Days</span>
             </div>
           </div>
@@ -224,47 +226,47 @@ export const OverviewView: React.FC = () => {
       {/* ROW 2: COMPACT SECONDARY KPI TRIO */}
       {/* ------------------------------------------------------------- */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
-        <div className="bg-[#14151B] border border-[#22242D] rounded-[20px] px-5 py-3.5 flex items-center justify-between">
+        <div className="bg-[#14151B] border border-[#22242D] hover:border-rose-500/40 rounded-[20px] px-5 py-4 flex items-center justify-between transition-colors shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-rose-500/15 text-rose-400 flex items-center justify-center">
-              <MapPin className="w-4 h-4" />
+            <div className="w-10 h-10 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold">
+              <MapPin className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-xs text-[#9FA4B2]">High-Risk Spatial Zones</span>
-              <div className="font-display font-bold text-xl text-[#FFFFFF]">06 Sectors</div>
+              <span className="text-xs sm:text-sm font-bold text-[#E2E8F0] block">High-Risk Spatial Zones</span>
+              <div className="font-display font-extrabold text-xl sm:text-2xl text-[#FFFFFF]">06 Sectors</div>
             </div>
           </div>
-          <span className="px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-400 text-[10px] font-bold font-mono">
+          <span className="px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-300 text-xs font-extrabold font-mono border border-rose-500/30">
             +2 PREDICTED
           </span>
         </div>
 
-        <div className="bg-[#14151B] border border-[#22242D] rounded-[20px] px-5 py-3.5 flex items-center justify-between">
+        <div className="bg-[#14151B] border border-[#22242D] hover:border-teal-500/40 rounded-[20px] px-5 py-4 flex items-center justify-between transition-colors shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-teal-500/15 text-teal-400 flex items-center justify-center">
-              <ShieldCheck className="w-4 h-4" />
+            <div className="w-10 h-10 rounded-full bg-teal-500/20 text-teal-400 flex items-center justify-center font-bold">
+              <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-xs text-[#9FA4B2]">Case Resolution Rate</span>
-              <div className="font-display font-bold text-xl text-[#FFFFFF]">82.4%</div>
+              <span className="text-xs sm:text-sm font-bold text-[#E2E8F0] block">Case Resolution Rate</span>
+              <div className="font-display font-extrabold text-xl sm:text-2xl text-[#FFFFFF]">82.4%</div>
             </div>
           </div>
-          <span className="px-2 py-0.5 rounded-full bg-teal-500/15 text-teal-400 text-[10px] font-bold font-mono">
+          <span className="px-2.5 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-extrabold font-mono border border-teal-500/30">
             ▲ +4.5% MoM
           </span>
         </div>
 
-        <div className="bg-[#14151B] border border-[#22242D] rounded-[20px] px-5 py-3.5 flex items-center justify-between">
+        <div className="bg-[#14151B] border border-[#22242D] hover:border-amber-500/40 rounded-[20px] px-5 py-4 flex items-center justify-between transition-colors shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-amber-500/15 text-amber-400 flex items-center justify-center">
-              <Zap className="w-4 h-4" />
+            <div className="w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+              <Zap className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-xs text-[#9FA4B2]">Cases Filed Today</span>
-              <div className="font-display font-bold text-xl text-[#FFFFFF]">35 Incidents</div>
+              <span className="text-xs sm:text-sm font-bold text-[#E2E8F0] block">Cases Filed Today</span>
+              <div className="font-display font-extrabold text-xl sm:text-2xl text-[#FFFFFF]">35 Incidents</div>
             </div>
           </div>
-          <span className="px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 text-[10px] font-bold font-mono">
+          <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-extrabold font-mono border border-amber-500/30">
             ▲ +8.2%
           </span>
         </div>
@@ -292,17 +294,17 @@ export const OverviewView: React.FC = () => {
             {/* Gauge Hero Layout */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
               {/* Semi-circular Donut Gauge */}
-              <div className="md:col-span-6 flex flex-col items-center justify-center relative min-h-[220px]">
-                <ResponsiveContainer width="100%" height={220}>
+              <div className="md:col-span-6 flex flex-col items-center justify-center relative min-h-[230px]">
+                <ResponsiveContainer width="100%" height={230}>
                   <PieChart>
                     <Pie
                       data={categoryDistribution}
                       cx="50%"
-                      cy="70%"
+                      cy="80%"
                       startAngle={180}
                       endAngle={0}
-                      innerRadius={65}
-                      outerRadius={95}
+                      innerRadius={78}
+                      outerRadius={108}
                       paddingAngle={4}
                       dataKey="value"
                     >
@@ -318,12 +320,12 @@ export const OverviewView: React.FC = () => {
                   </PieChart>
                 </ResponsiveContainer>
 
-                {/* Big Number Centered inside Gauge */}
-                <div className="absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
+                {/* Big Number Centered inside Gauge (positioned cleanly below arc) */}
+                <div className="absolute top-[78%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none bg-[#0B0C0E]/95 border border-[#22242D] px-5 py-2 rounded-2xl shadow-2xl backdrop-blur-md">
                   <div className="font-display font-extrabold text-3xl sm:text-4xl text-[#FFFFFF] tracking-tight tabular-nums">
                     1,248
                   </div>
-                  <div className="text-[11px] font-mono text-[#9FA4B2] uppercase tracking-wider mt-0.5">
+                  <div className="text-xs font-mono font-extrabold text-[#CCFF00] uppercase tracking-wider">
                     Active Risk Score
                   </div>
                 </div>
@@ -331,16 +333,16 @@ export const OverviewView: React.FC = () => {
 
               {/* Top Districts by Volume Progress Bars */}
               <div className="md:col-span-6 space-y-3.5 border-t md:border-t-0 md:border-l border-[#22242D] pt-4 md:pt-0 md:pl-6">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[#9FA4B2] mb-3">
+                <h3 className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#E2E8F0] mb-3">
                   Top Districts by Incident Volume
                 </h3>
                 {districtVolumeData.map((district) => (
-                  <div key={district.name} className="space-y-1 text-xs">
+                  <div key={district.name} className="space-y-1 text-xs sm:text-sm">
                     <div className="flex items-center justify-between">
-                      <span className="font-medium text-[#FFFFFF] truncate">{district.name}</span>
-                      <span className="font-mono text-[#9FA4B2] text-[11px]">{district.count} ({district.pct}%)</span>
+                      <span className="font-bold text-[#FFFFFF] truncate">{district.name}</span>
+                      <span className="font-mono text-[#E2E8F0] font-bold text-xs">{district.count} ({district.pct}%)</span>
                     </div>
-                    <div className="w-full bg-[#0B0C0E] h-2 rounded-full overflow-hidden border border-[#22242D]">
+                    <div className="w-full bg-[#0B0C0E] h-2.5 rounded-full overflow-hidden border border-[#22242D]">
                       <div
                         className="h-full rounded-full transition-all duration-500"
                         style={{ width: `${district.pct}%`, backgroundColor: district.color }}
@@ -352,24 +354,24 @@ export const OverviewView: React.FC = () => {
             </div>
 
             {/* Crime-type Circular Icon Row under Gauge */}
-            <div className="pt-3 border-t border-[#22242D] flex flex-wrap items-center justify-center gap-3">
+            <div className="pt-4 border-t border-[#22242D] flex flex-wrap items-center justify-center gap-3">
               {categoryDistribution.map((cat) => {
                 const isSelected = selectedCategoryFilter === cat.name;
                 return (
                   <button
                     key={cat.name}
                     onClick={() => setSelectedCategoryFilter(isSelected ? null : cat.name)}
-                    className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-extrabold transition-all ${
                       isSelected
-                        ? 'bg-teal-500 text-slate-950 shadow-glow-teal border border-teal-400'
-                        : 'bg-[#1B1C24] text-[#9FA4B2] hover:text-[#FFFFFF] border border-[#22242D]'
+                        ? 'bg-[#CCFF00] text-slate-950 shadow-glow-teal border border-[#CCFF00]'
+                        : 'bg-[#1B1C24] text-[#E2E8F0] hover:text-[#FFFFFF] border border-[#22242D]'
                     }`}
                   >
-                    <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs" style={{ backgroundColor: `${cat.color}25` }}>
+                    <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs" style={{ backgroundColor: `${cat.color}35` }}>
                       {cat.icon}
                     </span>
                     <span>{cat.name}</span>
-                    <span className="font-mono text-[10px] opacity-75">({cat.value}%)</span>
+                    <span className="font-mono text-xs opacity-90">({cat.value}%)</span>
                   </button>
                 );
               })}
