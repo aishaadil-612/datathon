@@ -31,16 +31,16 @@ export const AlertTicker: React.FC = () => {
   };
 
   return (
-    <div className="bg-[#14161C] border-b border-[#232631] px-4 py-1.5 flex items-center justify-between text-xs select-none">
+    <div className="bg-[#14151B] border-b border-[#22242D] px-4 py-1.5 flex items-center justify-between text-xs select-none">
       <div className="flex items-center gap-3 overflow-hidden">
         <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-400 font-mono text-[10px] font-bold tracking-wider shrink-0 border border-amber-500/30">
           <AlertTriangle className="w-3.5 h-3.5" />
           <span>{t.alertTickerTitle}</span>
         </div>
         
-        <div className="truncate text-[#8A8F9C] font-sans flex items-center gap-2">
+        <div className="truncate text-[#9FA4B2] font-sans flex items-center gap-2">
           <Activity className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-          <span className="font-bold text-[#E8EAF0]">HOODI-ORR CORRIDOR:</span>
+          <span className="font-bold text-[#FFFFFF]">HOODI-ORR CORRIDOR:</span>
           <span className="truncate">Spatio-temporal model flags 88% rising risk probability for night-time warehouse break-ins over next 30 days.</span>
         </div>
       </div>

@@ -87,7 +87,7 @@ export const AIWorkspaceWidget: React.FC<{ isFullView?: boolean }> = ({ isFullVi
     return (
       <button
         onClick={toggleWorkspaceWidget}
-        className="fixed bottom-6 right-6 z-40 bg-[#14161C] hover:bg-[#1E222D] text-[#E8EAF0] p-4 rounded-full shadow-glow-teal border border-[#232631] flex items-center gap-2.5 transition-transform hover:scale-105 select-none"
+        className="fixed bottom-6 right-6 z-40 bg-[#14151B] hover:bg-[#1B1C24] text-[#FFFFFF] p-4 rounded-full shadow-glow-teal border border-[#22242D] flex items-center gap-2.5 transition-transform hover:scale-105 select-none"
       >
         <Bot className="w-5 h-5 text-teal-400 animate-pulse" />
         <span className="text-xs font-mono font-bold">{t.navCopilot}</span>
@@ -100,25 +100,25 @@ export const AIWorkspaceWidget: React.FC<{ isFullView?: boolean }> = ({ isFullVi
       className={
         isFullView
           ? "p-6 max-w-4xl mx-auto h-[calc(100vh-5rem)] flex flex-col select-none"
-          : "fixed bottom-6 right-6 z-40 w-96 max-w-[calc(100vw-2rem)] h-[540px] bg-[#14161C] rounded-[24px] border border-[#232631] shadow-2xl flex flex-col overflow-hidden select-none"
+          : "fixed bottom-6 right-6 z-40 w-96 max-w-[calc(100vw-2rem)] h-[540px] bg-[#14151B] rounded-[24px] border border-[#22242D] shadow-2xl flex flex-col overflow-hidden select-none"
       }
     >
       {/* Widget Header */}
-      <div className="bg-[#0A0B0F] text-[#E8EAF0] p-4 flex items-center justify-between border-b border-[#232631] shrink-0">
+      <div className="bg-[#0B0C0E] text-[#FFFFFF] p-4 flex items-center justify-between border-b border-[#22242D] shrink-0">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-full bg-teal-500/20 border border-teal-500/30 flex items-center justify-center text-teal-400">
             <Bot className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="font-display font-bold text-sm leading-tight text-[#E8EAF0]">{t.copilotTitle}</h3>
-            <p className="text-[10px] text-[#8A8F9C] font-mono">{t.copilotSubtitle}</p>
+            <h3 className="font-display font-bold text-sm leading-tight text-[#FFFFFF]">{t.copilotTitle}</h3>
+            <p className="text-[10px] text-[#9FA4B2] font-mono">{t.copilotSubtitle}</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           <button
             onClick={() => setLanguage(language === 'en' ? 'kn' : 'en')}
-            className="px-2.5 py-1 bg-[#14161C] hover:bg-[#1E222D] rounded-full text-[10px] font-mono text-teal-400 border border-[#232631] flex items-center gap-1"
+            className="px-2.5 py-1 bg-[#14151B] hover:bg-[#1B1C24] rounded-full text-[10px] font-mono text-teal-400 border border-[#22242D] flex items-center gap-1"
           >
             <Globe className="w-3 h-3" />
             <span>{language.toUpperCase()}</span>
@@ -127,7 +127,7 @@ export const AIWorkspaceWidget: React.FC<{ isFullView?: boolean }> = ({ isFullVi
           {!isFullView && (
             <button
               onClick={toggleWorkspaceWidget}
-              className="p-1 hover:bg-[#1E222D] rounded-full text-[#8A8F9C] hover:text-[#E8EAF0]"
+              className="p-1 hover:bg-[#1B1C24] rounded-full text-[#9FA4B2] hover:text-[#FFFFFF]"
             >
               <Minimize2 className="w-4 h-4" />
             </button>
@@ -136,10 +136,10 @@ export const AIWorkspaceWidget: React.FC<{ isFullView?: boolean }> = ({ isFullVi
       </div>
 
       {/* Main Workspace Body */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#0A0B0F]">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#0B0C0E]">
         {/* Suggested Queries Chips */}
         <div className="space-y-2">
-          <span className="text-[10px] font-mono font-bold text-[#8A8F9C] uppercase tracking-wider block">
+          <span className="text-[10px] font-mono font-bold text-[#9FA4B2] uppercase tracking-wider block">
             {t.suggestedQueries}
           </span>
           <div className="flex flex-col gap-1.5">
@@ -147,7 +147,7 @@ export const AIWorkspaceWidget: React.FC<{ isFullView?: boolean }> = ({ isFullVi
               <button
                 key={q.id}
                 onClick={() => handleSelectQuery(q)}
-                className="text-left p-3 rounded-xl bg-[#14161C] border border-[#232631] hover:border-teal-500/40 hover:bg-[#1E222D] text-xs text-[#E8EAF0] transition-all font-sans"
+                className="text-left p-3 rounded-xl bg-[#14151B] border border-[#22242D] hover:border-teal-500/40 hover:bg-[#1B1C24] text-xs text-[#FFFFFF] transition-all font-sans"
               >
                 {language === 'en' ? q.queryEn : q.queryKn}
               </button>
@@ -157,18 +157,18 @@ export const AIWorkspaceWidget: React.FC<{ isFullView?: boolean }> = ({ isFullVi
 
         {/* Loading State Shimmer */}
         {isLoading && (
-          <div className="p-4 rounded-2xl bg-[#14161C] border border-[#232631] space-y-3 animate-pulse">
-            <div className="h-4 bg-[#232631] rounded w-3/4" />
-            <div className="h-3 bg-[#232631] rounded w-full" />
-            <div className="h-3 bg-[#232631] rounded w-5/6" />
+          <div className="p-4 rounded-2xl bg-[#14151B] border border-[#22242D] space-y-3 animate-pulse">
+            <div className="h-4 bg-[#22242D] rounded w-3/4" />
+            <div className="h-3 bg-[#22242D] rounded w-full" />
+            <div className="h-3 bg-[#22242D] rounded w-5/6" />
           </div>
         )}
 
         {/* Active AI Response Card */}
         {activeQuery && !isLoading && (
-          <div className="bg-[#14161C] p-4 rounded-2xl border border-[#232631] shadow-command space-y-3">
-            <div className="flex items-center justify-between border-b border-[#232631] pb-2">
-              <span className="text-[10px] font-mono text-[#8A8F9C] uppercase font-bold">
+          <div className="bg-[#14151B] p-4 rounded-2xl border border-[#22242D] shadow-command space-y-3">
+            <div className="flex items-center justify-between border-b border-[#22242D] pb-2">
+              <span className="text-[10px] font-mono text-[#9FA4B2] uppercase font-bold">
                 Synthesized Copilot Output
               </span>
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30">
@@ -176,12 +176,12 @@ export const AIWorkspaceWidget: React.FC<{ isFullView?: boolean }> = ({ isFullVi
               </span>
             </div>
 
-            <p className="text-xs text-[#E8EAF0] leading-relaxed font-sans whitespace-pre-line">
+            <p className="text-xs text-[#FFFFFF] leading-relaxed font-sans whitespace-pre-line">
               {language === 'en' ? activeQuery.responseEn : activeQuery.responseKn}
             </p>
 
-            <div className="pt-2 border-t border-[#232631] space-y-1.5">
-              <span className="text-[10px] font-mono text-[#8A8F9C] block">
+            <div className="pt-2 border-t border-[#22242D] space-y-1.5">
+              <span className="text-[10px] font-mono text-[#9FA4B2] block">
                 {t.sourcesTitle}
               </span>
               <div className="flex flex-wrap gap-1.5">
@@ -194,7 +194,7 @@ export const AIWorkspaceWidget: React.FC<{ isFullView?: boolean }> = ({ isFullVi
                         setActiveView('search');
                       }
                     }}
-                    className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-[#0A0B0F] text-teal-400 border border-[#232631] hover:bg-[#1E222D]"
+                    className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-[#0B0C0E] text-teal-400 border border-[#22242D] hover:bg-[#1B1C24]"
                   >
                     {id}
                   </button>
@@ -230,13 +230,13 @@ export const AIWorkspaceWidget: React.FC<{ isFullView?: boolean }> = ({ isFullVi
       </div>
 
       {/* Input Footer */}
-      <form onSubmit={handleCustomSubmit} className="p-3 bg-[#0A0B0F] border-t border-[#232631] flex items-center gap-2">
+      <form onSubmit={handleCustomSubmit} className="p-3 bg-[#0B0C0E] border-t border-[#22242D] flex items-center gap-2">
         <input
           type="text"
           value={inputQuery}
           onChange={(e) => setInputQuery(e.target.value)}
           placeholder={t.askAssistant}
-          className="flex-1 px-4 py-2 bg-[#14161C] border border-[#232631] rounded-full text-xs text-[#E8EAF0] placeholder:text-[#8A8F9C]/60 focus:outline-none focus:border-teal-500 font-sans"
+          className="flex-1 px-4 py-2 bg-[#14151B] border border-[#22242D] rounded-full text-xs text-[#FFFFFF] placeholder:text-[#9FA4B2]/60 focus:outline-none focus:border-teal-500 font-sans"
         />
         <button
           type="submit"

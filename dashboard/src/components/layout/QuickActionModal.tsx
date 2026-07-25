@@ -43,22 +43,22 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({ isOpen, onCl
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="relative z-10 w-full max-w-lg bg-[#14161C] border border-[#232631] rounded-[24px] shadow-2xl p-6 space-y-5"
+            className="relative z-10 w-full max-w-lg bg-[#14151B] border border-[#22242D] rounded-[24px] shadow-2xl p-6 space-y-5"
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-[#232631] pb-4">
+            <div className="flex items-center justify-between border-b border-[#22242D] pb-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-teal-500/15 text-teal-400 flex items-center justify-center">
                   <FilePlus className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="font-display font-bold text-lg text-[#E8EAF0]">CrimeLens Quick Action</h2>
-                  <p className="text-xs text-[#8A8F9C]">File a new FIR case entry or issue an intelligence alert</p>
+                  <h2 className="font-display font-bold text-lg text-[#FFFFFF]">CrimeLens Quick Action</h2>
+                  <p className="text-xs text-[#9FA4B2]">File a new FIR case entry or issue an intelligence alert</p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="w-8 h-8 rounded-full bg-[#1E222D] text-[#8A8F9C] hover:text-[#E8EAF0] flex items-center justify-center transition-colors"
+                className="w-8 h-8 rounded-full bg-[#1B1C24] text-[#9FA4B2] hover:text-[#FFFFFF] flex items-center justify-center transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -69,20 +69,20 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({ isOpen, onCl
                 <div className="w-14 h-14 rounded-full bg-teal-500/20 text-teal-400 flex items-center justify-center">
                   <CheckCircle2 className="w-8 h-8 animate-bounce" />
                 </div>
-                <h3 className="font-display font-bold text-xl text-[#E8EAF0]">Intelligence Record Logged</h3>
-                <p className="text-sm text-[#8A8F9C]">Case FIR-2026-0590 successfully created and indexed into AI graph.</p>
+                <h3 className="font-display font-bold text-xl text-[#FFFFFF]">Intelligence Record Logged</h3>
+                <p className="text-sm text-[#9FA4B2]">Case FIR-2026-0590 successfully created and indexed into AI graph.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Type selector pills */}
-                <div className="grid grid-cols-2 gap-2 p-1 bg-[#0A0B0F] border border-[#232631] rounded-2xl">
+                <div className="grid grid-cols-2 gap-2 p-1 bg-[#0B0C0E] border border-[#22242D] rounded-2xl">
                   <button
                     type="button"
                     onClick={() => setActionType('case')}
                     className={`py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
                       actionType === 'case'
                         ? 'bg-teal-500 text-slate-950 shadow'
-                        : 'text-[#8A8F9C] hover:text-[#E8EAF0]'
+                        : 'text-[#9FA4B2] hover:text-[#FFFFFF]'
                     }`}
                   >
                     <FilePlus className="w-3.5 h-3.5" />
@@ -94,7 +94,7 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({ isOpen, onCl
                     className={`py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
                       actionType === 'alert'
                         ? 'bg-rose-500 text-white shadow'
-                        : 'text-[#8A8F9C] hover:text-[#E8EAF0]'
+                        : 'text-[#9FA4B2] hover:text-[#FFFFFF]'
                     }`}
                   >
                     <AlertTriangle className="w-3.5 h-3.5" />
@@ -105,7 +105,7 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({ isOpen, onCl
                 {/* Form fields */}
                 <div className="space-y-3 text-xs">
                   <div>
-                    <label className="block text-[#8A8F9C] font-mono mb-1">
+                    <label className="block text-[#9FA4B2] font-mono mb-1">
                       {actionType === 'case' ? 'Case Title / Incident Summary' : 'Alert Headline'}
                     </label>
                     <input
@@ -114,17 +114,17 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({ isOpen, onCl
                       placeholder={actionType === 'case' ? 'e.g. Serial Warehouse Break-in at Hoodi' : 'e.g. Suspect Vehicle ANPR Match on Ring Rd'}
                       value={caseTitle}
                       onChange={(e) => setCaseTitle(e.target.value)}
-                      className="w-full bg-[#0A0B0F] border border-[#232631] rounded-xl px-3 py-2 text-[#E8EAF0] focus:outline-none focus:border-teal-500 transition-colors placeholder-[#8A8F9C]/50"
+                      className="w-full bg-[#0B0C0E] border border-[#22242D] rounded-xl px-3 py-2 text-[#FFFFFF] focus:outline-none focus:border-teal-500 transition-colors placeholder-[#9FA4B2]/50"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[#8A8F9C] font-mono mb-1">Jurisdiction / Zone</label>
+                      <label className="block text-[#9FA4B2] font-mono mb-1">Jurisdiction / Zone</label>
                       <select
                         value={district}
                         onChange={(e) => setDistrict(e.target.value)}
-                        className="w-full bg-[#0A0B0F] border border-[#232631] rounded-xl px-3 py-2 text-[#E8EAF0] focus:outline-none focus:border-teal-500 transition-colors"
+                        className="w-full bg-[#0B0C0E] border border-[#22242D] rounded-xl px-3 py-2 text-[#FFFFFF] focus:outline-none focus:border-teal-500 transition-colors"
                       >
                         <option>Whitefield Sub-Division</option>
                         <option>Indiranagar Station</option>
@@ -134,11 +134,11 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({ isOpen, onCl
                     </div>
 
                     <div>
-                      <label className="block text-[#8A8F9C] font-mono mb-1">Crime Category</label>
+                      <label className="block text-[#9FA4B2] font-mono mb-1">Crime Category</label>
                       <select
                         value={crimeCategory}
                         onChange={(e) => setCrimeCategory(e.target.value)}
-                        className="w-full bg-[#0A0B0F] border border-[#232631] rounded-xl px-3 py-2 text-[#E8EAF0] focus:outline-none focus:border-teal-500 transition-colors"
+                        className="w-full bg-[#0B0C0E] border border-[#22242D] rounded-xl px-3 py-2 text-[#FFFFFF] focus:outline-none focus:border-teal-500 transition-colors"
                       >
                         <option>Burglary / Theft</option>
                         <option>Armed Robbery</option>
@@ -155,7 +155,7 @@ export const QuickActionModal: React.FC<QuickActionModalProps> = ({ isOpen, onCl
                   <button
                     type="button"
                     onClick={onClose}
-                    className="px-4 py-2 rounded-xl text-xs font-semibold text-[#8A8F9C] hover:text-[#E8EAF0] transition-colors"
+                    className="px-4 py-2 rounded-xl text-xs font-semibold text-[#9FA4B2] hover:text-[#FFFFFF] transition-colors"
                   >
                     Cancel
                   </button>

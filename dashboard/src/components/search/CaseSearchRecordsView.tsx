@@ -77,36 +77,36 @@ export const CaseSearchRecordsView: React.FC = () => {
   return (
     <div className="p-6 space-y-6 max-w-[1600px] mx-auto select-none">
       {/* Search Bar & Faceted Filter Bar */}
-      <div className="bg-[#14161C] text-[#E8EAF0] p-6 rounded-[24px] border border-[#232631] shadow-command space-y-4">
+      <div className="bg-[#14151B] text-[#FFFFFF] p-6 rounded-[24px] border border-[#22242D] shadow-command space-y-4">
         <div>
-          <h2 className="font-display text-lg font-bold tracking-tight flex items-center gap-2 text-[#E8EAF0]">
+          <h2 className="font-display text-lg font-bold tracking-tight flex items-center gap-2 text-[#FFFFFF]">
             <Search className="w-5 h-5 text-teal-400" />
             <span>{t.searchTitle}</span>
           </h2>
-          <p className="text-xs text-[#8A8F9C] font-mono">{t.searchSubtitle}</p>
+          <p className="text-xs text-[#9FA4B2] font-mono">{t.searchSubtitle}</p>
         </div>
 
         {/* Search Input */}
         <div className="relative">
-          <Search className="w-5 h-5 absolute left-3.5 top-3.5 text-[#8A8F9C] pointer-events-none" />
+          <Search className="w-5 h-5 absolute left-3.5 top-3.5 text-[#9FA4B2] pointer-events-none" />
           <input
             type="text"
             value={globalSearchQuery}
             onChange={(e) => setGlobalSearchQuery(e.target.value)}
             placeholder="Search by FIR ID, vehicle plate, suspect name, station, or modus operandi..."
-            className="w-full pl-11 pr-4 py-3 bg-[#0A0B0F] border border-[#232631] rounded-full text-sm text-[#E8EAF0] placeholder:text-[#8A8F9C]/60 focus:outline-none focus:border-teal-500 font-sans transition-colors"
+            className="w-full pl-11 pr-4 py-3 bg-[#0B0C0E] border border-[#22242D] rounded-full text-sm text-[#FFFFFF] placeholder:text-[#9FA4B2]/60 focus:outline-none focus:border-teal-500 font-sans transition-colors"
           />
         </div>
 
         {/* Faceted Filter Controls */}
         <div className="flex flex-wrap items-center gap-4 text-xs font-mono pt-1">
-          <div className="flex items-center gap-2 bg-[#0A0B0F] px-3.5 py-1.5 rounded-full border border-[#232631]">
+          <div className="flex items-center gap-2 bg-[#0B0C0E] px-3.5 py-1.5 rounded-full border border-[#22242D]">
             <Filter className="w-3.5 h-3.5 text-amber-400" />
-            <span className="text-[#8A8F9C]">{t.filterCrimeType}:</span>
+            <span className="text-[#9FA4B2]">{t.filterCrimeType}:</span>
             <select
               value={crimeTypeFilter}
               onChange={(e) => setCrimeTypeFilter(e.target.value)}
-              className="bg-[#14161C] text-[#E8EAF0] border border-[#232631] rounded-full px-2.5 py-0.5 focus:outline-none"
+              className="bg-[#14151B] text-[#FFFFFF] border border-[#22242D] rounded-full px-2.5 py-0.5 focus:outline-none"
             >
               <option value="all">All Types</option>
               <option value="Commercial Burglary">Commercial Burglary</option>
@@ -116,12 +116,12 @@ export const CaseSearchRecordsView: React.FC = () => {
             </select>
           </div>
 
-          <div className="flex items-center gap-2 bg-[#0A0B0F] px-3.5 py-1.5 rounded-full border border-[#232631]">
-            <span className="text-[#8A8F9C]">{t.filterDistrict}:</span>
+          <div className="flex items-center gap-2 bg-[#0B0C0E] px-3.5 py-1.5 rounded-full border border-[#22242D]">
+            <span className="text-[#9FA4B2]">{t.filterDistrict}:</span>
             <select
               value={stationFilter}
               onChange={(e) => setStationFilter(e.target.value)}
-              className="bg-[#14161C] text-[#E8EAF0] border border-[#232631] rounded-full px-2.5 py-0.5 focus:outline-none"
+              className="bg-[#14151B] text-[#FFFFFF] border border-[#22242D] rounded-full px-2.5 py-0.5 focus:outline-none"
             >
               <option value="all">All Stations</option>
               <option value="Whitefield">Whitefield</option>
@@ -131,8 +131,8 @@ export const CaseSearchRecordsView: React.FC = () => {
             </select>
           </div>
 
-          <div className="flex items-center gap-2 bg-[#0A0B0F] px-3.5 py-1.5 rounded-full border border-[#232631]">
-            <span className="text-[#8A8F9C]">Min Risk Score:</span>
+          <div className="flex items-center gap-2 bg-[#0B0C0E] px-3.5 py-1.5 rounded-full border border-[#22242D]">
+            <span className="text-[#9FA4B2]">Min Risk Score:</span>
             <input
               type="range"
               min="50"
@@ -144,8 +144,8 @@ export const CaseSearchRecordsView: React.FC = () => {
             <span className="font-bold text-teal-400">{minRiskScore}%</span>
           </div>
 
-          <span className="ml-auto text-[#8A8F9C] text-xs">
-            Showing <strong className="text-[#E8EAF0]">{filteredCases.length}</strong> matching records
+          <span className="ml-auto text-[#9FA4B2] text-xs">
+            Showing <strong className="text-[#FFFFFF]">{filteredCases.length}</strong> matching records
           </span>
         </div>
       </div>
@@ -155,22 +155,22 @@ export const CaseSearchRecordsView: React.FC = () => {
         {filteredCases.map((fir) => (
           <div
             key={fir.caseId}
-            className="bg-[#14161C] rounded-[24px] border border-[#232631] shadow-command p-6 space-y-4 hover:border-teal-500/40 transition-all"
+            className="bg-[#14151B] rounded-[24px] border border-[#22242D] shadow-command p-6 space-y-4 hover:border-teal-500/40 transition-all"
           >
             {/* Card Header */}
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#232631] pb-3">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#22242D] pb-3">
               <div className="flex items-center gap-3">
                 <span className="font-mono font-extrabold text-teal-400 text-base">{fir.caseId}</span>
                 <span className="px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-teal-500/10 text-teal-300 border border-teal-500/30">
                   {fir.station}
                 </span>
-                <span className="px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-[#0A0B0F] text-[#8A8F9C] border border-[#232631]">
+                <span className="px-3 py-0.5 rounded-full text-xs font-mono font-bold bg-[#0B0C0E] text-[#9FA4B2] border border-[#22242D]">
                   {fir.crimeType}
                 </span>
               </div>
 
               <div className="flex items-center gap-3">
-                <span className="text-xs font-mono text-[#8A8F9C]">{fir.dateTime}</span>
+                <span className="text-xs font-mono text-[#9FA4B2]">{fir.dateTime}</span>
                 <button
                   onClick={() => handleExplainCaseTag(fir.caseId, fir.title, fir.riskScore)}
                   className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30 transition-colors flex items-center gap-1"
@@ -183,38 +183,38 @@ export const CaseSearchRecordsView: React.FC = () => {
 
             {/* Title & Summary */}
             <div className="space-y-1">
-              <h3 className="font-display font-bold text-[#E8EAF0] text-base">{fir.title}</h3>
-              <p className="text-sm text-[#8A8F9C] leading-relaxed font-sans">{fir.summary}</p>
+              <h3 className="font-display font-bold text-[#FFFFFF] text-base">{fir.title}</h3>
+              <p className="text-sm text-[#9FA4B2] leading-relaxed font-sans">{fir.summary}</p>
             </div>
 
             {/* Entities & Vehicles Involved */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs bg-[#0A0B0F] p-4 rounded-xl border border-[#232631]">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs bg-[#0B0C0E] p-4 rounded-xl border border-[#22242D]">
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4 text-indigo-400 shrink-0" />
-                <span className="text-[#8A8F9C] font-mono">Suspects:</span>
-                <span className="font-semibold text-[#E8EAF0] truncate">{fir.suspects.join(', ')}</span>
+                <span className="text-[#9FA4B2] font-mono">Suspects:</span>
+                <span className="font-semibold text-[#FFFFFF] truncate">{fir.suspects.join(', ')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Car className="w-4 h-4 text-teal-400 shrink-0" />
-                <span className="text-[#8A8F9C] font-mono">Vehicles:</span>
+                <span className="text-[#9FA4B2] font-mono">Vehicles:</span>
                 <span className="font-mono font-bold text-teal-400 truncate">{fir.vehiclesInvolved.join(', ')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <FileText className="w-4 h-4 text-amber-400 shrink-0" />
-                <span className="text-[#8A8F9C] font-mono">MO Tags:</span>
-                <span className="font-semibold text-[#E8EAF0] truncate">{fir.moTags.join(' • ')}</span>
+                <span className="text-[#9FA4B2] font-mono">MO Tags:</span>
+                <span className="font-semibold text-[#FFFFFF] truncate">{fir.moTags.join(' • ')}</span>
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center justify-between pt-2 border-t border-[#232631] text-xs font-mono">
+            <div className="flex items-center justify-between pt-2 border-t border-[#22242D] text-xs font-mono">
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => {
                     setSelectedCaseId(fir.caseId);
                     setActiveView('timelines');
                   }}
-                  className="px-4 py-1.5 rounded-full bg-[#0A0B0F] text-[#E8EAF0] hover:text-teal-400 border border-[#232631] font-semibold flex items-center gap-1.5 transition-colors"
+                  className="px-4 py-1.5 rounded-full bg-[#0B0C0E] text-[#FFFFFF] hover:text-teal-400 border border-[#22242D] font-semibold flex items-center gap-1.5 transition-colors"
                 >
                   <Clock className="w-3.5 h-3.5 text-teal-400" />
                   <span>Timeline View</span>

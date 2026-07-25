@@ -34,8 +34,8 @@ export const CrimeLensLogo: React.FC<CrimeLensLogoProps> = ({
       >
         <defs>
           <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#2DD4BF" />
-            <stop offset="100%" stopColor="#0D9488" />
+            <stop offset="0%" stopColor="#CCFF00" />
+            <stop offset="100%" stopColor="#A0D400" />
           </linearGradient>
         </defs>
 
@@ -66,19 +66,19 @@ export const CrimeLensLogo: React.FC<CrimeLensLogoProps> = ({
         </g>
 
         {/* Inner Target Crosshair Lines */}
-        <line x1="50" y1="28" x2="50" y2="34" stroke="#2DD4BF" strokeWidth="2.5" strokeLinecap="round" />
-        <line x1="50" y1="66" x2="50" y2="72" stroke="#2DD4BF" strokeWidth="2.5" strokeLinecap="round" />
-        <line x1="28" y1="50" x2="34" y2="50" stroke="#2DD4BF" strokeWidth="2.5" strokeLinecap="round" />
-        <line x1="66" y1="50" x2="72" y2="50" stroke="#2DD4BF" strokeWidth="2.5" strokeLinecap="round" />
+        <line x1="50" y1="28" x2="50" y2="34" stroke="#CCFF00" strokeWidth="2.5" strokeLinecap="round" />
+        <line x1="50" y1="66" x2="50" y2="72" stroke="#CCFF00" strokeWidth="2.5" strokeLinecap="round" />
+        <line x1="28" y1="50" x2="34" y2="50" stroke="#CCFF00" strokeWidth="2.5" strokeLinecap="round" />
+        <line x1="66" y1="50" x2="72" y2="50" stroke="#CCFF00" strokeWidth="2.5" strokeLinecap="round" />
 
         {/* Center Focus Dot */}
-        <circle cx="50" cy="50" r="4.5" fill="#2DD4BF" />
+        <circle cx="50" cy="50" r="4.5" fill="#CCFF00" />
       </svg>
 
       {showWordmark && (
         <span className="font-display font-bold tracking-tight text-lg sm:text-xl select-none">
-          <span className="text-[#E8EAF0]">Crime</span>
-          <span className="text-[#2DD4BF] ml-0.5">Lens</span>
+          <span className="text-[#FFFFFF]">Crime</span>
+          <span className="text-[#CCFF00] ml-0.5">Lens</span>
         </span>
       )}
     </div>

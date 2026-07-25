@@ -23,9 +23,9 @@ L.Icon.Default.mergeOptions({
 
 // Custom incident marker icon generator
 const createCustomMarkerIcon = (severity: string, caseId: string) => {
-  const color = severity === 'critical' ? '#F43F5E' : severity === 'high' ? '#F5A623' : '#2DD4BF';
+  const color = severity === 'critical' ? '#E53935' : severity === 'high' ? '#F5A623' : '#CCFF00';
   const html = `
-    <div style="background-color: ${color}; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0A0B0F; font-weight: 800; border: 2px solid #0A0B0F; box-shadow: 0 0 12px ${color}80; font-size: 10px; font-family: monospace;">
+    <div style="background-color: ${color}; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #0B0C0E; font-weight: 800; border: 2px solid #0B0C0E; box-shadow: 0 0 12px ${color}80; font-size: 10px; font-family: monospace;">
       ${caseId.slice(-3)}
     </div>
   `;
@@ -76,27 +76,31 @@ export const HotspotMapView: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] overflow-hidden select-none">
+    <section id="section-hotspots" className="flex flex-col h-screen overflow-hidden select-none border-b border-[#22242D] pt-2">
       {/* Top Map Control Bar */}
-      <div className="bg-[#14161C] text-[#E8EAF0] px-6 py-3 border-b border-[#232631] flex flex-wrap items-center justify-between gap-4 z-20 shadow-md">
+      <div className="bg-[#14151B] text-[#FFFFFF] px-6 py-3 border-b border-[#22242D] flex flex-wrap items-center justify-between gap-4 z-20 shadow-md">
         <div>
-          <h2 className="font-display text-lg font-bold tracking-tight flex items-center gap-2 text-[#E8EAF0]">
-            <MapPin className="w-5 h-5 text-teal-400" />
+          <div className="flex items-center gap-2 text-xs font-mono text-[#CCFF00] mb-1">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>03 — HOTSPOT INTELLIGENCE</span>
+          </div>
+          <h2 className="font-display text-lg font-bold tracking-tight flex items-center gap-2 text-[#FFFFFF]">
+            <MapPin className="w-5 h-5 text-[#CCFF00]" />
             <span>{t.mapTitle}</span>
           </h2>
-          <p className="text-xs text-[#8A8F9C] font-mono">{t.mapSubtitle}</p>
+          <p className="text-xs text-[#9FA4B2] font-mono">{t.mapSubtitle}</p>
         </div>
 
         {/* Controls: Heatmap, Forecast, Time Slider */}
         <div className="flex items-center gap-3">
           {/* Time Horizon Slider Toggle */}
-          <div className="flex items-center gap-1 bg-[#0A0B0F] p-1 rounded-full border border-[#232631] text-xs font-mono">
-            <Calendar className="w-3.5 h-3.5 text-[#8A8F9C] ml-2" />
-            <span className="text-[#8A8F9C] mr-1 hidden sm:inline">{t.timeSliderLabel}</span>
+          <div className="flex items-center gap-1 bg-[#0B0C0E] p-1 rounded-full border border-[#22242D] text-xs font-mono">
+            <Calendar className="w-3.5 h-3.5 text-[#9FA4B2] ml-2" />
+            <span className="text-[#9FA4B2] mr-1 hidden sm:inline">{t.timeSliderLabel}</span>
             <button
               onClick={() => setTimeHorizon('7d')}
               className={`px-2.5 py-1 rounded-full transition-colors ${
-                timeHorizon === '7d' ? 'bg-teal-500 text-slate-950 font-bold' : 'text-[#8A8F9C] hover:text-[#E8EAF0]'
+                timeHorizon === '7d' ? 'bg-teal-500 text-slate-950 font-bold' : 'text-[#9FA4B2] hover:text-[#FFFFFF]'
               }`}
             >
               {t.time7d}
@@ -104,7 +108,7 @@ export const HotspotMapView: React.FC = () => {
             <button
               onClick={() => setTimeHorizon('30d')}
               className={`px-2.5 py-1 rounded-full transition-colors ${
-                timeHorizon === '30d' ? 'bg-teal-500 text-slate-950 font-bold' : 'text-[#8A8F9C] hover:text-[#E8EAF0]'
+                timeHorizon === '30d' ? 'bg-teal-500 text-slate-950 font-bold' : 'text-[#9FA4B2] hover:text-[#FFFFFF]'
               }`}
             >
               {t.time30d}
@@ -112,7 +116,7 @@ export const HotspotMapView: React.FC = () => {
             <button
               onClick={() => setTimeHorizon('90d')}
               className={`px-2.5 py-1 rounded-full transition-colors ${
-                timeHorizon === '90d' ? 'bg-teal-500 text-slate-950 font-bold' : 'text-[#8A8F9C] hover:text-[#E8EAF0]'
+                timeHorizon === '90d' ? 'bg-teal-500 text-slate-950 font-bold' : 'text-[#9FA4B2] hover:text-[#FFFFFF]'
               }`}
             >
               {t.time90d}
@@ -125,7 +129,7 @@ export const HotspotMapView: React.FC = () => {
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-medium transition-colors ${
               showHeatmap
                 ? 'bg-teal-500/20 border-teal-500/40 text-teal-400 shadow-glow-teal'
-                : 'bg-[#0A0B0F] border-[#232631] text-[#8A8F9C] hover:text-[#E8EAF0]'
+                : 'bg-[#0B0C0E] border-[#22242D] text-[#9FA4B2] hover:text-[#FFFFFF]'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
@@ -138,7 +142,7 @@ export const HotspotMapView: React.FC = () => {
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-bold transition-all ${
               showForecast
                 ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-glow-amber'
-                : 'bg-[#0A0B0F] border-[#232631] text-[#8A8F9C] hover:text-[#E8EAF0]'
+                : 'bg-[#0B0C0E] border-[#22242D] text-[#9FA4B2] hover:text-[#FFFFFF]'
             }`}
           >
             <Sparkles className="w-4 h-4 animate-pulse" />
@@ -150,7 +154,7 @@ export const HotspotMapView: React.FC = () => {
       {/* Main Map Body & Side Drilldown Panel */}
       <div className="flex-1 flex overflow-hidden relative">
         {/* Leaflet Map Canvas */}
-        <div className="flex-1 h-full z-10 bg-[#0A0B0F]">
+        <div className="flex-1 h-full z-10 bg-[#0B0C0E]">
           <MapContainer
             center={[12.9698, 77.6999]}
             zoom={12}
@@ -173,8 +177,8 @@ export const HotspotMapView: React.FC = () => {
                     center={[hotspot.lat, hotspot.lng]}
                     radius={hotspot.radius}
                     pathOptions={{
-                      color: '#F43F5E',
-                      fillColor: '#F43F5E',
+                      color: '#E53935',
+                      fillColor: '#E53935',
                       fillOpacity: 0.25,
                       weight: 2,
                     }}
@@ -182,8 +186,8 @@ export const HotspotMapView: React.FC = () => {
                     <Popup>
                       <div className="p-2 space-y-1 font-sans text-xs">
                         <span className="font-bold text-rose-400 block">{hotspot.name}</span>
-                        <p className="text-[#8A8F9C]">District: {hotspot.district}</p>
-                        <p className="text-[#8A8F9C] font-mono">Density: {hotspot.density} incidents/km²</p>
+                        <p className="text-[#9FA4B2]">District: {hotspot.district}</p>
+                        <p className="text-[#9FA4B2] font-mono">Density: {hotspot.density} incidents/km²</p>
                         <p className="font-semibold text-teal-400">Active Cases: {hotspot.activeCasesCount}</p>
                       </div>
                     </Popup>
@@ -215,10 +219,10 @@ export const HotspotMapView: React.FC = () => {
                             <Sparkles className="w-3.5 h-3.5" />
                             <span>PREDICTED RISING-RISK ZONE</span>
                           </div>
-                          <span className="font-bold text-sm text-[#E8EAF0] block">{hotspot.name}</span>
+                          <span className="font-bold text-sm text-[#FFFFFF] block">{hotspot.name}</span>
                           <div className="bg-amber-500/10 p-2 rounded-xl border border-amber-500/30 text-[11px]">
                             <span className="font-bold text-amber-400">AI Confidence: {hotspot.confidence}%</span>
-                            <p className="text-[#8A8F9C] mt-0.5">Predicted 30-day spike in night break-ins.</p>
+                            <p className="text-[#9FA4B2] mt-0.5">Predicted 30-day spike in night break-ins.</p>
                           </div>
                           <button
                             onClick={() => handleZoneClick(hotspot.name, hotspot.confidence)}
@@ -247,10 +251,10 @@ export const HotspotMapView: React.FC = () => {
                         Risk {fir.riskScore}%
                       </span>
                     </div>
-                    <span className="font-bold text-[#E8EAF0] block leading-tight">{fir.title}</span>
-                    <p className="text-[#8A8F9C] leading-snug">{fir.summary.slice(0, 100)}...</p>
+                    <span className="font-bold text-[#FFFFFF] block leading-tight">{fir.title}</span>
+                    <p className="text-[#9FA4B2] leading-snug">{fir.summary.slice(0, 100)}...</p>
                     <div className="pt-1 flex items-center justify-between">
-                      <span className="text-[#8A8F9C] font-mono text-[11px]">{fir.station}</span>
+                      <span className="text-[#9FA4B2] font-mono text-[11px]">{fir.station}</span>
                       <button
                         onClick={() => {
                           setSelectedCaseId(fir.caseId);
@@ -268,36 +272,36 @@ export const HotspotMapView: React.FC = () => {
           </MapContainer>
 
           {/* Map Legend Overlay */}
-          <div className="absolute bottom-6 left-6 z-20 bg-[#14161C]/95 backdrop-blur-md p-4 rounded-2xl border border-[#232631] shadow-2xl space-y-2.5 text-xs">
-            <span className="font-bold text-[#E8EAF0] block font-mono text-[11px] uppercase tracking-wider">
+          <div className="absolute bottom-6 left-6 z-20 bg-[#14151B]/95 backdrop-blur-md p-4 rounded-2xl border border-[#22242D] shadow-2xl space-y-2.5 text-xs">
+            <span className="font-bold text-[#FFFFFF] block font-mono text-[11px] uppercase tracking-wider">
               CrimeLens Map Legend
             </span>
             <div className="flex items-center gap-2.5">
-              <span className="w-3.5 h-3.5 rounded-full bg-rose-500 border border-[#0A0B0F]" />
-              <span className="text-[#E8EAF0] font-medium">{t.mapLegendConfirmed}</span>
+              <span className="w-3.5 h-3.5 rounded-full bg-rose-500 border border-[#0B0C0E]" />
+              <span className="text-[#FFFFFF] font-medium">{t.mapLegendConfirmed}</span>
             </div>
             <div className="flex items-center gap-2.5">
               <span className="w-4 h-4 rounded border-2 border-dashed border-amber-400 bg-amber-400/30" />
-              <span className="text-[#E8EAF0] font-semibold">{t.mapLegendPredicted}</span>
+              <span className="text-[#FFFFFF] font-semibold">{t.mapLegendPredicted}</span>
             </div>
             <div className="flex items-center gap-2.5">
               <span className="w-3.5 h-3.5 rounded-full bg-teal-400 opacity-80" />
-              <span className="text-[#8A8F9C]">{t.mapLegendLow}</span>
+              <span className="text-[#9FA4B2]">{t.mapLegendLow}</span>
             </div>
           </div>
         </div>
 
         {/* Right Side Drilldown Panel */}
-        <div className="w-80 bg-[#14161C] border-l border-[#232631] h-full overflow-y-auto p-5 space-y-5 shadow-2xl z-20 shrink-0">
-          <div className="flex items-center justify-between border-b border-[#232631] pb-3">
-            <h3 className="font-display font-bold text-[#E8EAF0] text-sm">{t.stationDrilldown}</h3>
+        <div className="w-80 bg-[#14151B] border-l border-[#22242D] h-full overflow-y-auto p-5 space-y-5 shadow-2xl z-20 shrink-0">
+          <div className="flex items-center justify-between border-b border-[#22242D] pb-3">
+            <h3 className="font-display font-bold text-[#FFFFFF] text-sm">{t.stationDrilldown}</h3>
             <span className="text-xs font-mono text-teal-400 bg-teal-500/10 px-2.5 py-0.5 rounded-full border border-teal-500/30">
               Bengaluru East
             </span>
           </div>
 
           <div className="space-y-3">
-            <div className="bg-[#0A0B0F] p-4 rounded-2xl border border-amber-500/30 space-y-2">
+            <div className="bg-[#0B0C0E] p-4 rounded-2xl border border-amber-500/30 space-y-2">
               <div className="flex items-center justify-between text-xs font-bold text-amber-400">
                 <span className="flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5" />
@@ -305,7 +309,7 @@ export const HotspotMapView: React.FC = () => {
                 </span>
                 <span className="font-mono">88% Risk</span>
               </div>
-              <p className="text-xs text-[#8A8F9C] leading-snug">
+              <p className="text-xs text-[#9FA4B2] leading-snug">
                 Predicted surge in night-time warehouse break-ins. Recommending midnight mobile patrol allocation.
               </p>
               <button
@@ -318,7 +322,7 @@ export const HotspotMapView: React.FC = () => {
             </div>
 
             <div className="space-y-2.5 pt-2">
-              <span className="text-xs font-mono font-bold text-[#8A8F9C] uppercase tracking-wider">Active Precinct FIRs</span>
+              <span className="text-xs font-mono font-bold text-[#9FA4B2] uppercase tracking-wider">Active Precinct FIRs</span>
               {mockFIRs.map((fir) => (
                 <div
                   key={fir.caseId}
@@ -326,20 +330,20 @@ export const HotspotMapView: React.FC = () => {
                     setSelectedCaseId(fir.caseId);
                     setActiveView('search');
                   }}
-                  className="p-3.5 rounded-xl border border-[#232631] bg-[#0A0B0F] hover:border-teal-500/50 hover:bg-[#1E222D] cursor-pointer transition-all space-y-1 text-xs"
+                  className="p-3.5 rounded-xl border border-[#22242D] bg-[#0B0C0E] hover:border-teal-500/50 hover:bg-[#1B1C24] cursor-pointer transition-all space-y-1 text-xs"
                 >
                   <div className="flex items-center justify-between font-mono font-bold">
                     <span className="text-teal-400">{fir.caseId}</span>
-                    <span className="text-[10px] text-[#8A8F9C]">{fir.dateTime.split(' ')[0]}</span>
+                    <span className="text-[10px] text-[#9FA4B2]">{fir.dateTime.split(' ')[0]}</span>
                   </div>
-                  <p className="font-bold text-[#E8EAF0] truncate">{fir.title}</p>
-                  <p className="text-[11px] text-[#8A8F9C] line-clamp-2">{fir.summary}</p>
+                  <p className="font-bold text-[#FFFFFF] truncate">{fir.title}</p>
+                  <p className="text-[11px] text-[#9FA4B2] line-clamp-2">{fir.summary}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };

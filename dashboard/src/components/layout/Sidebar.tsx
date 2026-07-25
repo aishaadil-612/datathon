@@ -1,43 +1,41 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
+  Sparkles,
   LayoutDashboard,
   MapPin,
-  GitFork,
-  Clock,
-  Search,
-  ShieldCheck,
-  Sparkles,
-  Settings,
+  Cpu,
   Shield
 } from 'lucide-react';
+import { useRouterStore, AppView } from '../../store/useRouterStore';
 import { useDashboardStore } from '../../store/useDashboardStore';
-import { ViewType } from '../../types';
 
 export const Sidebar: React.FC = () => {
-  const { activeView, setActiveView, role } = useDashboardStore();
+  const { activeView, setActiveView } = useRouterStore();
+  const { role } = useDashboardStore();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
-  const navItems: Array<{ id: ViewType | 'settings'; label: string; icon: React.ReactNode }> = [
-    { id: 'overview', label: 'Overview Dashboard', icon: <LayoutDashboard className="w-5 h-5" /> },
-    { id: 'map', label: 'Hotspot Spatial Map', icon: <MapPin className="w-5 h-5" /> },
-    { id: 'network', label: 'Criminal Network Graph', icon: <GitFork className="w-5 h-5" /> },
-    { id: 'timelines', label: 'Case Serial Timelines', icon: <Clock className="w-5 h-5" /> },
-    { id: 'search', label: 'Global Case Search', icon: <Search className="w-5 h-5" /> },
-    { id: 'audit', label: 'Audit & Governance Log', icon: <ShieldCheck className="w-5 h-5" /> },
-    { id: 'copilot', label: 'CrimeLens AI Workspace', icon: <Sparkles className="w-5 h-5" /> },
-    { id: 'settings', label: 'System Settings', icon: <Settings className="w-5 h-5" /> },
+  // Left Sidebar Rail contains ONLY the 4 Core Platform Sections
+  const navItems: Array<{ id: AppView; label: string; icon: React.ReactNode }> = [
+    { id: 'iris', label: '01 — Ask IRIS Copilot', icon: <Sparkles className="w-5 h-5" /> },
+    { id: 'overview', label: '02 — Command Overview', icon: <LayoutDashboard className="w-5 h-5" /> },
+    { id: 'hotspots', label: '03 — Hotspot Intelligence', icon: <MapPin className="w-5 h-5" /> },
+    { id: 'inside-iris', label: '04 — Inside IRIS Trace', icon: <Cpu className="w-5 h-5" /> },
   ];
 
   return (
     <>
-      {/* Desktop/Tablet Icon-only Rail Sidebar */}
-      <aside className="hidden md:flex flex-col items-center justify-between w-16 bg-[#0A0B0F] border-r border-[#232631] py-4 z-30 shrink-0 select-none">
+      {/* Desktop Left Rail Navigation Sidebar */}
+      <aside className="hidden md:flex flex-col items-center justify-between w-16 bg-[#0B0C0E] border-r border-[#22242D] py-4 z-30 shrink-0 select-none">
         {/* Top Logo Icon Badge */}
         <div className="flex flex-col items-center gap-6">
-          <div className="w-10 h-10 rounded-2xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400">
+          <button
+            onClick={() => setActiveView('iris')}
+            className="w-10 h-10 rounded-2xl bg-[#CCFF00]/10 border border-[#CCFF00]/30 flex items-center justify-center text-[#CCFF00] shadow-glow-teal hover:scale-105 transition-transform"
+            title="Ask IRIS Landing"
+          >
             <Shield className="w-5 h-5" />
-          </div>
+          </button>
 
           {/* Navigation Items Rail */}
           <nav className="flex flex-col items-center gap-3">
@@ -53,22 +51,18 @@ export const Sidebar: React.FC = () => {
                   onMouseLeave={() => setHoveredId(null)}
                 >
                   <button
-                    onClick={() => {
-                      if (item.id !== 'settings') {
-                        setActiveView(item.id as ViewType);
-                      }
-                    }}
+                    onClick={() => setActiveView(item.id)}
                     className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all relative ${
                       isActive
-                        ? 'bg-teal-500/15 text-teal-400 border border-teal-500/40 shadow-glow-teal'
-                        : 'text-[#8A8F9C] hover:text-[#E8EAF0] hover:bg-[#14161C] border border-transparent'
+                        ? 'bg-[#CCFF00]/15 text-[#CCFF00] border border-[#CCFF00]/40 shadow-glow-teal'
+                        : 'text-[#CBD5E1] hover:text-[#FFFFFF] hover:bg-[#14151B] border border-transparent'
                     }`}
                   >
                     {/* Active Bar Indicator */}
                     {isActive && (
                       <motion.div
                         layoutId="activeSidebarIndicator"
-                        className="absolute -left-3 top-2.5 bottom-2.5 w-1 bg-teal-400 rounded-r-full"
+                        className="absolute -left-3 top-2.5 bottom-2.5 w-1 bg-[#CCFF00] rounded-r-full"
                         transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                       />
                     )}
@@ -86,13 +80,8 @@ export const Sidebar: React.FC = () => {
                         transition={{ duration: 0.15, ease: 'easeOut' }}
                         className="absolute left-full top-1/2 -translate-y-1/2 z-50 pointer-events-none"
                       >
-                        <div className="bg-[#14161C] text-[#E8EAF0] text-xs font-semibold px-3 py-1.5 rounded-xl border border-[#232631] shadow-xl whitespace-nowrap flex items-center gap-2">
+                        <div className="bg-[#14151B] text-[#FFFFFF] text-xs font-semibold px-3 py-1.5 rounded-xl border border-[#22242D] shadow-xl whitespace-nowrap flex items-center gap-2 font-sans">
                           <span>{item.label}</span>
-                          {item.id === 'copilot' && (
-                            <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-teal-500/20 text-teal-300">
-                              AI
-                            </span>
-                          )}
                         </div>
                       </motion.div>
                     )}
@@ -106,22 +95,22 @@ export const Sidebar: React.FC = () => {
         {/* Bottom Role Mode Indicator */}
         <div className="flex flex-col items-center gap-1" title={`Role: ${role.toUpperCase()}`}>
           <div className="w-3 h-3 rounded-full bg-amber-400/80 border border-amber-400 animate-pulse" />
-          <span className="text-[9px] font-mono text-[#8A8F9C] uppercase">{role.slice(0, 3)}</span>
+          <span className="text-[10px] font-mono text-[#CBD5E1] uppercase font-bold">{role.slice(0, 3)}</span>
         </div>
       </aside>
 
       {/* Mobile Bottom Navigation Rail (<768px) */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-[#0A0B0F]/95 backdrop-blur-md border-t border-[#232631] flex items-center justify-around z-40 px-2 select-none">
-        {navItems.slice(0, 5).map((item) => {
+      <div className="md:hidden fixed bottom-0 left-0 right-0 h-14 bg-[#0B0C0E]/95 backdrop-blur-md border-t border-[#22242D] flex items-center justify-around z-40 px-2 select-none">
+        {navItems.map((item) => {
           const isActive = activeView === item.id;
           return (
             <button
               key={item.id}
-              onClick={() => setActiveView(item.id as ViewType)}
+              onClick={() => setActiveView(item.id)}
               className={`p-2 rounded-xl transition-all ${
                 isActive
-                  ? 'bg-teal-500/20 text-teal-400 border border-teal-500/30'
-                  : 'text-[#8A8F9C]'
+                  ? 'bg-[#CCFF00]/20 text-[#CCFF00] border border-[#CCFF00]/30'
+                  : 'text-[#CBD5E1]'
               }`}
             >
               {item.icon}

@@ -1,27 +1,39 @@
 import React from 'react';
-import { useDashboardStore } from './store/useDashboardStore';
+import { useRouterStore } from './store/useRouterStore';
 import { TopBar } from './components/layout/TopBar';
 import { Sidebar } from './components/layout/Sidebar';
-import { AlertTicker } from './components/layout/AlertTicker';
+import { AskIrisSection } from './components/landing/AskIrisSection';
 import { OverviewView } from './components/overview/OverviewView';
 import { HotspotMapView } from './components/map/HotspotMapView';
+import { InsideIrisSection } from './components/landing/InsideIrisSection';
 import { CriminalNetworkView } from './components/network/CriminalNetworkView';
 import { CaseTimelinesView } from './components/timelines/CaseTimelinesView';
 import { CaseSearchRecordsView } from './components/search/CaseSearchRecordsView';
 import { AuditGovernanceView } from './components/audit/AuditGovernanceView';
-import { AIWorkspaceWidget } from './components/workspace/AIWorkspaceWidget';
+import { CitizenFirPortal } from './components/fir/CitizenFirPortal';
 import { ExplainabilityPanel } from './components/common/ExplainabilityPanel';
 import { SyntheticWatermark } from './components/common/SyntheticWatermark';
 
 export const App: React.FC = () => {
-  const { activeView } = useDashboardStore();
+  const { activeView, isFirPath } = useRouterStore();
 
-  const renderCurrentView = () => {
+  // If user navigates directly to /fir in browser address bar (e.g. http://localhost:3000/fir)
+  const isDirectFirUrl = typeof window !== 'undefined' && window.location.pathname === '/fir';
+
+  if (isFirPath || isDirectFirUrl) {
+    return <CitizenFirPortal />;
+  }
+
+  const renderActiveView = () => {
     switch (activeView) {
+      case 'iris':
+        return <AskIrisSection />;
       case 'overview':
         return <OverviewView />;
-      case 'map':
+      case 'hotspots':
         return <HotspotMapView />;
+      case 'inside-iris':
+        return <InsideIrisSection />;
       case 'network':
         return <CriminalNetworkView />;
       case 'timelines':
@@ -30,37 +42,29 @@ export const App: React.FC = () => {
         return <CaseSearchRecordsView />;
       case 'audit':
         return <AuditGovernanceView />;
-      case 'copilot':
-        return <AIWorkspaceWidget isFullView={true} />;
       default:
-        return <OverviewView />;
+        return <AskIrisSection />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-command-bg flex flex-col font-sans select-none overflow-x-hidden">
+    <div className="min-h-screen bg-[#0B0C0E] flex flex-col font-sans select-none overflow-x-hidden text-[#FFFFFF]">
       {/* Persistent Top Bar */}
       <TopBar />
 
-      {/* Persistent Alert Ticker */}
-      <AlertTicker />
-
-      {/* Main Operational Body */}
+      {/* Main Layout Container with Left Navigation Sidebar Rail */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Persistent Left Sidebar */}
+        {/* Left Sidebar Rail */}
         <Sidebar />
 
-        {/* Dynamic View Container */}
-        <main className="flex-1 overflow-y-auto min-h-[calc(100vh-6rem)]">
-          {renderCurrentView()}
+        {/* Main Active View Content Panel */}
+        <main className="flex-1 overflow-y-auto">
+          {renderActiveView()}
         </main>
       </div>
 
       {/* Shared Explainability Drawer */}
       <ExplainabilityPanel />
-
-      {/* Embedded Docked AI Workspace (Shown on all views except full copilot view) */}
-      {activeView !== 'copilot' && <AIWorkspaceWidget isFullView={false} />}
 
       {/* Synthetic Demo Watermark */}
       <SyntheticWatermark />

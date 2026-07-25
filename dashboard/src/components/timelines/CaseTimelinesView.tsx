@@ -120,7 +120,7 @@ export const CaseTimelinesView: React.FC = () => {
   const getEventTypeBadge = (type: CaseEvent['type']) => {
     switch (type) {
       case 'fir_filed':
-        return { label: 'FIR Filed', color: 'bg-[#0A0B0F] text-[#E8EAF0] border border-[#232631]' };
+        return { label: 'FIR Filed', color: 'bg-[#0B0C0E] text-[#FFFFFF] border border-[#22242D]' };
       case 'anpr_hit':
         return { label: 'ANPR Match', color: 'bg-teal-500/20 text-teal-300 border border-teal-500/30' };
       case 'evidence_logged':
@@ -135,24 +135,24 @@ export const CaseTimelinesView: React.FC = () => {
   return (
     <div className="p-6 space-y-6 max-w-[1600px] mx-auto select-none">
       {/* Header & Multi-case comparison picker */}
-      <div className="bg-[#14161C] text-[#E8EAF0] p-6 rounded-[24px] border border-[#232631] shadow-command flex flex-wrap items-center justify-between gap-4">
+      <div className="bg-[#14151B] text-[#FFFFFF] p-6 rounded-[24px] border border-[#22242D] shadow-command flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="font-display text-lg font-bold tracking-tight flex items-center gap-2 text-[#E8EAF0]">
+          <h2 className="font-display text-lg font-bold tracking-tight flex items-center gap-2 text-[#FFFFFF]">
             <Clock className="w-5 h-5 text-teal-400" />
             <span>{t.timelineTitle}</span>
           </h2>
-          <p className="text-xs text-[#8A8F9C] font-mono">{t.timelineSubtitle}</p>
+          <p className="text-xs text-[#9FA4B2] font-mono">{t.timelineSubtitle}</p>
         </div>
 
         {/* Multi-Case Overlay Picker */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 bg-[#0A0B0F] p-2 rounded-full border border-[#232631]">
+          <div className="flex items-center gap-2 bg-[#0B0C0E] p-2 rounded-full border border-[#22242D]">
             <Layers className="w-4 h-4 text-amber-400 ml-1" />
-            <span className="text-xs font-mono text-[#8A8F9C]">{t.compareCases}:</span>
+            <span className="text-xs font-mono text-[#9FA4B2]">{t.compareCases}:</span>
             <select
               onChange={(e) => handleAddCase(e.target.value)}
               value=""
-              className="bg-[#14161C] text-[#E8EAF0] text-xs border border-[#232631] rounded-full px-3 py-1 font-mono focus:outline-none focus:border-teal-500 transition-colors"
+              className="bg-[#14151B] text-[#FFFFFF] text-xs border border-[#22242D] rounded-full px-3 py-1 font-mono focus:outline-none focus:border-teal-500 transition-colors"
             >
               <option value="">+ {t.selectOverlayCase}</option>
               {mockFIRs.map((f) => (
@@ -182,10 +182,10 @@ export const CaseTimelinesView: React.FC = () => {
           return (
             <div
               key={caseId}
-              className="bg-[#14161C] rounded-[24px] border border-[#232631] shadow-command p-6 flex flex-col space-y-4"
+              className="bg-[#14151B] rounded-[24px] border border-[#22242D] shadow-command p-6 flex flex-col space-y-4"
             >
               {/* Timeline Header */}
-              <div className="flex items-center justify-between border-b border-[#232631] pb-3">
+              <div className="flex items-center justify-between border-b border-[#22242D] pb-3">
                 <div className="space-y-0.5">
                   <div className="flex items-center gap-2">
                     <span className="font-mono font-bold text-teal-400 text-sm">{caseId}</span>
@@ -193,13 +193,13 @@ export const CaseTimelinesView: React.FC = () => {
                       Risk {fir?.riskScore}%
                     </span>
                   </div>
-                  <h4 className="font-display font-bold text-[#E8EAF0] text-sm truncate">{fir?.title}</h4>
+                  <h4 className="font-display font-bold text-[#FFFFFF] text-sm truncate">{fir?.title}</h4>
                 </div>
 
                 {comparedCaseIds.length > 1 && (
                   <button
                     onClick={() => handleRemoveCase(caseId)}
-                    className="p-1.5 text-[#8A8F9C] hover:text-rose-400 rounded-full transition-colors"
+                    className="p-1.5 text-[#9FA4B2] hover:text-rose-400 rounded-full transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -207,26 +207,26 @@ export const CaseTimelinesView: React.FC = () => {
               </div>
 
               {/* Vertical Event Sequence */}
-              <div className="space-y-6 relative before:absolute before:left-3.5 before:top-3 before:bottom-3 before:w-0.5 before:bg-[#232631] pt-1">
+              <div className="space-y-6 relative before:absolute before:left-3.5 before:top-3 before:bottom-3 before:w-0.5 before:bg-[#22242D] pt-1">
                 {caseEvents.map((evt) => {
                   const badge = getEventTypeBadge(evt.type);
                   return (
                     <div key={evt.id} className="relative pl-8 space-y-1">
                       {/* Timeline Dot */}
-                      <span className="absolute left-2 top-1.5 w-3 h-3 rounded-full bg-teal-400 border-2 border-[#14161C] shadow-glow-teal" />
+                      <span className="absolute left-2 top-1.5 w-3 h-3 rounded-full bg-teal-400 border-2 border-[#14151B] shadow-glow-teal" />
 
                       <div className="flex items-center justify-between text-xs">
                         <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold ${badge.color}`}>
                           {badge.label}
                         </span>
-                        <span className="text-[11px] font-mono text-[#8A8F9C]">{evt.timestamp}</span>
+                        <span className="text-[11px] font-mono text-[#9FA4B2]">{evt.timestamp}</span>
                       </div>
 
-                      <h5 className="font-display font-bold text-[#E8EAF0] text-xs pt-1">{evt.title}</h5>
-                      <p className="text-xs text-[#8A8F9C] leading-relaxed">{evt.description}</p>
+                      <h5 className="font-display font-bold text-[#FFFFFF] text-xs pt-1">{evt.title}</h5>
+                      <p className="text-xs text-[#9FA4B2] leading-relaxed">{evt.description}</p>
 
-                      <div className="pt-1 flex items-center gap-1.5 text-[10px] font-mono text-[#8A8F9C]">
-                        <FileText className="w-3 h-3 text-[#8A8F9C]" />
+                      <div className="pt-1 flex items-center gap-1.5 text-[10px] font-mono text-[#9FA4B2]">
+                        <FileText className="w-3 h-3 text-[#9FA4B2]" />
                         <span>{t.eventSource} {evt.sourceTag}</span>
                       </div>
                     </div>
@@ -235,9 +235,9 @@ export const CaseTimelinesView: React.FC = () => {
               </div>
 
               {/* Cross-case temporal match callout */}
-              <div className="mt-auto pt-3 border-t border-[#232631] bg-teal-500/10 p-3.5 rounded-xl border border-teal-500/30 text-xs">
+              <div className="mt-auto pt-3 border-t border-[#22242D] bg-teal-500/10 p-3.5 rounded-xl border border-teal-500/30 text-xs">
                 <span className="font-bold text-teal-400 block font-mono">Cross-Case Temporal Correlation</span>
-                <p className="text-[11px] text-[#8A8F9C]">
+                <p className="text-[11px] text-[#9FA4B2]">
                   Occurrence window (02:00-03:30 AM) aligns precisely across adjacent Eastern precinct burglaries.
                 </p>
               </div>

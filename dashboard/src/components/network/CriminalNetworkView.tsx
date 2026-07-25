@@ -117,46 +117,46 @@ export const CriminalNetworkView: React.FC = () => {
   return (
     <div className="flex flex-col h-[calc(100vh-4rem)] overflow-hidden select-none">
       {/* Top Header & Filter Bar */}
-      <div className="bg-[#14161C] text-[#E8EAF0] px-6 py-3 border-b border-[#232631] flex flex-wrap items-center justify-between gap-4 z-20 shadow-md">
+      <div className="bg-[#14151B] text-[#FFFFFF] px-6 py-3 border-b border-[#22242D] flex flex-wrap items-center justify-between gap-4 z-20 shadow-md">
         <div>
-          <h2 className="font-display text-lg font-bold tracking-tight flex items-center gap-2 text-[#E8EAF0]">
+          <h2 className="font-display text-lg font-bold tracking-tight flex items-center gap-2 text-[#FFFFFF]">
             <GitFork className="w-5 h-5 text-teal-400" />
             <span>{t.networkTitle}</span>
           </h2>
-          <p className="text-xs text-[#8A8F9C] font-mono">{t.networkSubtitle}</p>
+          <p className="text-xs text-[#9FA4B2] font-mono">{t.networkSubtitle}</p>
         </div>
 
         {/* Filters: Entity Type & Confidence Slider */}
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1 bg-[#0A0B0F] p-1 rounded-full border border-[#232631] text-xs font-mono">
-            <span className="text-[#8A8F9C] px-2">Type:</span>
+          <div className="flex items-center gap-1 bg-[#0B0C0E] p-1 rounded-full border border-[#22242D] text-xs font-mono">
+            <span className="text-[#9FA4B2] px-2">Type:</span>
             <button
               onClick={() => setEntityTypeFilter('all')}
-              className={`px-2.5 py-1 rounded-full transition-colors ${entityTypeFilter === 'all' ? 'bg-teal-500 text-slate-950 font-bold' : 'text-[#8A8F9C]'}`}
+              className={`px-2.5 py-1 rounded-full transition-colors ${entityTypeFilter === 'all' ? 'bg-teal-500 text-slate-950 font-bold' : 'text-[#9FA4B2]'}`}
             >
               All
             </button>
             <button
               onClick={() => setEntityTypeFilter('person')}
-              className={`px-2.5 py-1 rounded-full transition-colors ${entityTypeFilter === 'person' ? 'bg-teal-500 text-slate-950 font-bold' : 'text-[#8A8F9C]'}`}
+              className={`px-2.5 py-1 rounded-full transition-colors ${entityTypeFilter === 'person' ? 'bg-teal-500 text-slate-950 font-bold' : 'text-[#9FA4B2]'}`}
             >
               {t.filterEntityPerson}
             </button>
             <button
               onClick={() => setEntityTypeFilter('case')}
-              className={`px-2.5 py-1 rounded-full transition-colors ${entityTypeFilter === 'case' ? 'bg-teal-500 text-slate-950 font-bold' : 'text-[#8A8F9C]'}`}
+              className={`px-2.5 py-1 rounded-full transition-colors ${entityTypeFilter === 'case' ? 'bg-teal-500 text-slate-950 font-bold' : 'text-[#9FA4B2]'}`}
             >
               {t.filterEntityCase}
             </button>
             <button
               onClick={() => setEntityTypeFilter('vehicle')}
-              className={`px-2.5 py-1 rounded-full transition-colors ${entityTypeFilter === 'vehicle' ? 'bg-teal-500 text-slate-950 font-bold' : 'text-[#8A8F9C]'}`}
+              className={`px-2.5 py-1 rounded-full transition-colors ${entityTypeFilter === 'vehicle' ? 'bg-teal-500 text-slate-950 font-bold' : 'text-[#9FA4B2]'}`}
             >
               {t.filterEntityVehicle}
             </button>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono text-[#8A8F9C] bg-[#0A0B0F] px-3.5 py-1.5 rounded-full border border-[#232631]">
+          <div className="flex items-center gap-2 text-xs font-mono text-[#9FA4B2] bg-[#0B0C0E] px-3.5 py-1.5 rounded-full border border-[#22242D]">
             <span>Min Confidence:</span>
             <input
               type="range"
@@ -174,11 +174,11 @@ export const CriminalNetworkView: React.FC = () => {
       {/* Main Graph Workbench & Controls */}
       <div className="flex-1 flex overflow-hidden relative">
         {/* Canvas / Graph Display Workspace */}
-        <div className="flex-1 bg-[#0A0B0F] p-6 relative flex flex-col justify-between overflow-hidden">
+        <div className="flex-1 bg-[#0B0C0E] p-6 relative flex flex-col justify-between overflow-hidden">
           {/* Path Highlight Control Box */}
-          <div className="absolute top-4 left-4 z-20 bg-[#14161C]/95 backdrop-blur-md border border-[#232631] p-4 rounded-[20px] shadow-2xl text-xs space-y-3 w-80">
-            <div className="flex items-center justify-between border-b border-[#232631] pb-2">
-              <span className="font-display font-bold text-[#E8EAF0] flex items-center gap-1.5 font-mono">
+          <div className="absolute top-4 left-4 z-20 bg-[#14151B]/95 backdrop-blur-md border border-[#22242D] p-4 rounded-[20px] shadow-2xl text-xs space-y-3 w-80">
+            <div className="flex items-center justify-between border-b border-[#22242D] pb-2">
+              <span className="font-display font-bold text-[#FFFFFF] flex items-center gap-1.5 font-mono">
                 <GitFork className="w-4 h-4 text-teal-400" />
                 {t.pathHighlightTitle}
               </span>
@@ -195,11 +195,11 @@ export const CriminalNetworkView: React.FC = () => {
 
             <div className="space-y-2">
               <div>
-                <label className="text-[10px] text-[#8A8F9C] font-mono block mb-1">Source Entity</label>
+                <label className="text-[10px] text-[#9FA4B2] font-mono block mb-1">Source Entity</label>
                 <select
                   value={pathHighlight.sourceId || ''}
                   onChange={(e) => setPathSource(e.target.value || null)}
-                  className="w-full bg-[#0A0B0F] border border-[#232631] text-[#E8EAF0] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-teal-500 transition-colors"
+                  className="w-full bg-[#0B0C0E] border border-[#22242D] text-[#FFFFFF] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-teal-500 transition-colors"
                 >
                   <option value="">{t.selectSource}</option>
                   {mockEntities.map((e) => (
@@ -211,11 +211,11 @@ export const CriminalNetworkView: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-[10px] text-[#8A8F9C] font-mono block mb-1">Target Entity</label>
+                <label className="text-[10px] text-[#9FA4B2] font-mono block mb-1">Target Entity</label>
                 <select
                   value={pathHighlight.targetId || ''}
                   onChange={(e) => setPathTarget(e.target.value || null)}
-                  className="w-full bg-[#0A0B0F] border border-[#232631] text-[#E8EAF0] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-teal-500 transition-colors"
+                  className="w-full bg-[#0B0C0E] border border-[#22242D] text-[#FFFFFF] rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-teal-500 transition-colors"
                 >
                   <option value="">{t.selectTarget}</option>
                   {mockEntities.map((e) => (
@@ -233,7 +233,7 @@ export const CriminalNetworkView: React.FC = () => {
                   <CheckCircle2 className="w-4 h-4" />
                   <span>Shortest Path Highlighted</span>
                 </div>
-                <p className="text-[10px] text-[#8A8F9C]">
+                <p className="text-[10px] text-[#9FA4B2]">
                   {highlightedPathNodeIds.size} connected nodes highlighted in chain.
                 </p>
               </div>
@@ -257,12 +257,12 @@ export const CriminalNetworkView: React.FC = () => {
                     onClick={() => setSelectedEntityId(entity.id)}
                     className={`p-4 rounded-[20px] border transition-all cursor-pointer select-none relative flex flex-col justify-between ${
                       isSelected
-                        ? 'bg-[#14161C] border-teal-400 shadow-glow-teal scale-105 z-20'
+                        ? 'bg-[#14151B] border-teal-400 shadow-glow-teal scale-105 z-20'
                         : isHighlightedInPath
-                        ? 'bg-[#14161C] border-amber-400 shadow-glow-amber scale-105 z-20'
+                        ? 'bg-[#14151B] border-amber-400 shadow-glow-amber scale-105 z-20'
                         : isDimmed
-                        ? 'bg-[#14161C]/30 border-[#232631] opacity-30 hover:opacity-100'
-                        : 'bg-[#14161C] border-[#232631] hover:border-teal-500/40'
+                        ? 'bg-[#14151B]/30 border-[#22242D] opacity-30 hover:opacity-100'
+                        : 'bg-[#14151B] border-[#22242D] hover:border-teal-500/40'
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -275,9 +275,9 @@ export const CriminalNetworkView: React.FC = () => {
                     </div>
 
                     <div className="mt-3 space-y-0.5">
-                      <h4 className="font-display font-bold text-[#E8EAF0] text-sm">{entity.label}</h4>
+                      <h4 className="font-display font-bold text-[#FFFFFF] text-sm">{entity.label}</h4>
                       {entity.sublabel && (
-                        <p className="text-[11px] text-[#8A8F9C] truncate font-mono">{entity.sublabel}</p>
+                        <p className="text-[11px] text-[#9FA4B2] truncate font-mono">{entity.sublabel}</p>
                       )}
                     </div>
 
@@ -293,7 +293,7 @@ export const CriminalNetworkView: React.FC = () => {
           </div>
 
           {/* Graph Edge Type Legend */}
-          <div className="relative z-10 flex items-center justify-between text-xs font-mono text-[#8A8F9C] border-t border-[#232631] pt-3">
+          <div className="relative z-10 flex items-center justify-between text-xs font-mono text-[#9FA4B2] border-t border-[#22242D] pt-3">
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
                 <span className="w-6 h-0.5 bg-teal-400 inline-block" />
@@ -309,16 +309,16 @@ export const CriminalNetworkView: React.FC = () => {
         </div>
 
         {/* Right Entity Details Side Panel */}
-        <div className="w-80 bg-[#14161C] border-l border-[#232631] h-full overflow-y-auto p-5 space-y-5 shadow-2xl z-20 shrink-0">
-          <div className="flex items-center justify-between border-b border-[#232631] pb-3">
-            <h3 className="font-display font-bold text-[#E8EAF0] text-sm">{t.nodeDetails}</h3>
+        <div className="w-80 bg-[#14151B] border-l border-[#22242D] h-full overflow-y-auto p-5 space-y-5 shadow-2xl z-20 shrink-0">
+          <div className="flex items-center justify-between border-b border-[#22242D] pb-3">
+            <h3 className="font-display font-bold text-[#FFFFFF] text-sm">{t.nodeDetails}</h3>
             <span className="text-xs font-mono text-teal-400 bg-teal-500/10 px-2.5 py-0.5 rounded-full border border-teal-500/30">
               ID: {selectedEntity.id}
             </span>
           </div>
 
           {/* Entity Profile Header */}
-          <div className="p-4 rounded-[20px] bg-[#0A0B0F] border border-[#232631] text-[#E8EAF0] space-y-2">
+          <div className="p-4 rounded-[20px] bg-[#0B0C0E] border border-[#22242D] text-[#FFFFFF] space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono text-teal-400 uppercase font-bold">
                 {selectedEntity.type}
@@ -331,18 +331,18 @@ export const CriminalNetworkView: React.FC = () => {
             </div>
             <h4 className="text-base font-display font-bold">{selectedEntity.label}</h4>
             {selectedEntity.sublabel && (
-              <p className="text-xs text-[#8A8F9C] font-mono">{selectedEntity.sublabel}</p>
+              <p className="text-xs text-[#9FA4B2] font-mono">{selectedEntity.sublabel}</p>
             )}
           </div>
 
           {/* Entity Key Attributes */}
           <div className="space-y-2">
-            <span className="text-xs font-mono font-bold text-[#8A8F9C] uppercase tracking-wider">Key Attributes</span>
-            <div className="bg-[#0A0B0F] p-3.5 rounded-xl border border-[#232631] space-y-2 text-xs">
+            <span className="text-xs font-mono font-bold text-[#9FA4B2] uppercase tracking-wider">Key Attributes</span>
+            <div className="bg-[#0B0C0E] p-3.5 rounded-xl border border-[#22242D] space-y-2 text-xs">
               {Object.entries(selectedEntity.attributes).map(([key, val]) => (
-                <div key={key} className="flex items-center justify-between border-b border-[#232631]/60 pb-1">
-                  <span className="text-[#8A8F9C] font-mono capitalize">{key}:</span>
-                  <span className="font-semibold text-[#E8EAF0]">{String(val)}</span>
+                <div key={key} className="flex items-center justify-between border-b border-[#22242D]/60 pb-1">
+                  <span className="text-[#9FA4B2] font-mono capitalize">{key}:</span>
+                  <span className="font-semibold text-[#FFFFFF]">{String(val)}</span>
                 </div>
               ))}
             </div>
@@ -350,7 +350,7 @@ export const CriminalNetworkView: React.FC = () => {
 
           {/* Connected Graph Relationships List */}
           <div className="space-y-3 pt-2">
-            <span className="text-xs font-mono font-bold text-[#8A8F9C] uppercase tracking-wider">
+            <span className="text-xs font-mono font-bold text-[#9FA4B2] uppercase tracking-wider">
               Connected Graph Links
             </span>
             <div className="space-y-2.5">
@@ -359,7 +359,7 @@ export const CriminalNetworkView: React.FC = () => {
                 .map((rel) => (
                   <div
                     key={rel.id}
-                    className="p-3.5 rounded-xl border border-[#232631] bg-[#0A0B0F] hover:border-teal-500/40 space-y-2 text-xs"
+                    className="p-3.5 rounded-xl border border-[#22242D] bg-[#0B0C0E] hover:border-teal-500/40 space-y-2 text-xs"
                   >
                     <div className="flex items-center justify-between font-mono">
                       <span className="font-bold text-teal-400 capitalize">{rel.type.replace('_', ' ')}</span>
@@ -372,11 +372,11 @@ export const CriminalNetworkView: React.FC = () => {
                       </span>
                     </div>
 
-                    <p className="text-[11px] text-[#8A8F9C] leading-snug">{rel.description}</p>
+                    <p className="text-[11px] text-[#9FA4B2] leading-snug">{rel.description}</p>
 
                     <button
                       onClick={() => handleExplainLink(rel)}
-                      className="w-full text-left text-[11px] font-mono font-semibold text-teal-400 hover:underline flex items-center justify-between pt-1 border-t border-[#232631]"
+                      className="w-full text-left text-[11px] font-mono font-semibold text-teal-400 hover:underline flex items-center justify-between pt-1 border-t border-[#22242D]"
                     >
                       <span className="flex items-center gap-1">
                         <ShieldCheck className="w-3.5 h-3.5" />
