@@ -156,7 +156,7 @@ export const HotspotMapView: React.FC = () => {
         {/* Leaflet Map Canvas */}
         <div className="flex-1 h-full z-10 bg-[#0B0C0E]">
           <MapContainer
-            center={[12.9698, 77.6999]}
+            center={[22.5726, 88.3639]}
             zoom={12}
             scrollWheelZoom={true}
             style={{ height: '100%', width: '100%' }}
