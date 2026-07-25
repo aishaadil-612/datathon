@@ -4,14 +4,71 @@
 
 @layer base {
   body {
-    @apply bg-[#0B0C0E] text-[#FFFFFF] font-sans antialiased selection:bg-[#CCFF00] selection:text-slate-950;
+    @apply bg-[#0B0C0E] text-[#FFFFFF] font-sans antialiased selection:bg-[#CCFF00] selection:text-slate-950 transition-colors duration-300;
   }
 }
 
-/* Dark mode Leaflet Map customization */
+/* ------------------------------------------------------------- */
+/* LIGHT THEME STATE OVERRIDES (.light-theme)                    */
+/* ------------------------------------------------------------- */
+
+html.light-theme body,
+html.light-theme {
+  background-color: #F8FAFC !important;
+  color: #0F172A !important;
+}
+
+/* Background Overrides */
+html.light-theme .bg-\[\#0B0C0E\] {
+  background-color: #F8FAFC !important;
+}
+
+html.light-theme .bg-\[\#14151B\] {
+  background-color: #FFFFFF !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+}
+
+html.light-theme .bg-\[\#070709\] {
+  background-color: #F1F5F9 !important;
+}
+
+html.light-theme .bg-\[\#1B1C24\] {
+  background-color: #F1F5F9 !important;
+}
+
+/* Border Overrides */
+html.light-theme .border-\[\#22242D\] {
+  border-color: #E2E8F0 !important;
+}
+
+/* Text Color Overrides */
+html.light-theme .text-\[\#FFFFFF\] {
+  color: #0F172A !important;
+}
+
+html.light-theme .text-\[\#CBD5E1\] {
+  color: #475569 !important;
+}
+
+html.light-theme .text-\[\#9FA4B2\] {
+  color: #64748B !important;
+}
+
+/* Header & Sidebar in Light Mode */
+html.light-theme header,
+html.light-theme aside {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: #E2E8F0 !important;
+}
+
+/* Leaflet Map Light Mode Overrides */
 .leaflet-container {
   background-color: #0B0C0E !important;
   font-family: 'Inter', sans-serif !important;
+}
+
+html.light-theme .leaflet-container {
+  background-color: #F8FAFC !important;
 }
 
 .leaflet-popup-content-wrapper {
@@ -23,8 +80,19 @@
   border: 1px solid #22242D !important;
 }
 
+html.light-theme .leaflet-popup-content-wrapper {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15) !important;
+}
+
 .leaflet-popup-tip {
   background-color: #14151B !important;
+}
+
+html.light-theme .leaflet-popup-tip {
+  background-color: #FFFFFF !important;
 }
 
 .leaflet-popup-content {
@@ -37,7 +105,7 @@
   border: none;
 }
 
-/* Custom Scrollbar for CrimeLens dark dashboard */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -47,9 +115,17 @@
   background: #0B0C0E;
 }
 
+html.light-theme ::-webkit-scrollbar-track {
+  background: #F8FAFC;
+}
+
 ::-webkit-scrollbar-thumb {
   background: #22242D;
   border-radius: 4px;
+}
+
+html.light-theme ::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
 }
 
 ::-webkit-scrollbar-thumb:hover {

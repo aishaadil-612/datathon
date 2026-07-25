@@ -105,7 +105,7 @@ export const OverviewView: React.FC = () => {
           <Layers className="w-4 h-4" />
           <span>02 — COMMAND OVERVIEW</span>
         </div>
-        <span className="text-xs sm:text-sm font-mono font-bold text-[#E2E8F0] hidden sm:block">
+        <span className="text-xs sm:text-sm font-mono font-bold text-slate-600 dark:text-[#E2E8F0] hidden sm:block">
           Precinct Operational Metrics & Multi-Vector Intelligence Feed
         </span>
       </div>
@@ -228,45 +228,45 @@ export const OverviewView: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
         <div className="bg-[#14151B] border border-[#22242D] hover:border-rose-500/40 rounded-[20px] px-5 py-4 flex items-center justify-between transition-colors shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-full bg-rose-500/20 text-rose-500 flex items-center justify-center font-bold">
               <MapPin className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-xs sm:text-sm font-bold text-[#E2E8F0] block">High-Risk Spatial Zones</span>
-              <div className="font-display font-extrabold text-xl sm:text-2xl text-[#FFFFFF]">06 Sectors</div>
+              <span className="text-xs sm:text-sm font-bold text-slate-700 dark:text-[#E2E8F0] block">High-Risk Spatial Zones</span>
+              <div className="font-display font-extrabold text-xl sm:text-2xl text-[#0F172A] dark:text-[#FFFFFF]">06 Sectors</div>
             </div>
           </div>
-          <span className="px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-300 text-xs font-extrabold font-mono border border-rose-500/30">
+          <span className="px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-600 dark:text-rose-300 text-xs font-extrabold font-mono border border-rose-500/30">
             +2 PREDICTED
           </span>
         </div>
 
         <div className="bg-[#14151B] border border-[#22242D] hover:border-teal-500/40 rounded-[20px] px-5 py-4 flex items-center justify-between transition-colors shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-teal-500/20 text-teal-400 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-full bg-teal-500/20 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-xs sm:text-sm font-bold text-[#E2E8F0] block">Case Resolution Rate</span>
-              <div className="font-display font-extrabold text-xl sm:text-2xl text-[#FFFFFF]">82.4%</div>
+              <span className="text-xs sm:text-sm font-bold text-slate-700 dark:text-[#E2E8F0] block">Case Resolution Rate</span>
+              <div className="font-display font-extrabold text-xl sm:text-2xl text-[#0F172A] dark:text-[#FFFFFF]">82.4%</div>
             </div>
           </div>
-          <span className="px-2.5 py-1 rounded-full bg-teal-500/20 text-teal-300 text-xs font-extrabold font-mono border border-teal-500/30">
+          <span className="px-2.5 py-1 rounded-full bg-teal-500/20 text-teal-700 dark:text-teal-300 text-xs font-extrabold font-mono border border-teal-500/30">
             ▲ +4.5% MoM
           </span>
         </div>
 
         <div className="bg-[#14151B] border border-[#22242D] hover:border-amber-500/40 rounded-[20px] px-5 py-4 flex items-center justify-between transition-colors shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
               <Zap className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-xs sm:text-sm font-bold text-[#E2E8F0] block">Cases Filed Today</span>
-              <div className="font-display font-extrabold text-xl sm:text-2xl text-[#FFFFFF]">35 Incidents</div>
+              <span className="text-xs sm:text-sm font-bold text-slate-700 dark:text-[#E2E8F0] block">Cases Filed Today</span>
+              <div className="font-display font-extrabold text-xl sm:text-2xl text-[#0F172A] dark:text-[#FFFFFF]">35 Incidents</div>
             </div>
           </div>
-          <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-extrabold font-mono border border-amber-500/30">
+          <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 text-xs font-extrabold font-mono border border-amber-500/30">
             ▲ +8.2%
           </span>
         </div>
@@ -282,10 +282,10 @@ export const OverviewView: React.FC = () => {
           <div className="bg-[#14151B] border border-[#22242D] rounded-[24px] p-6 space-y-6 shadow-command">
             <div className="flex items-center justify-between border-b border-[#22242D] pb-4">
               <div>
-                <h2 className="font-display font-bold text-lg text-[#FFFFFF]">Crime Category Distribution</h2>
-                <p className="text-xs text-[#9FA4B2]">Real-time risk index segmentation by crime vector</p>
+                <h2 className="font-display font-bold text-lg text-[#0F172A] dark:text-[#FFFFFF]">Crime Category Distribution</h2>
+                <p className="text-xs text-slate-600 dark:text-[#9FA4B2]">Real-time risk index segmentation by crime vector</p>
               </div>
-              <div className="flex items-center gap-2 text-xs font-mono text-teal-400 bg-teal-500/10 px-3 py-1 rounded-full border border-teal-500/20">
+              <div className="flex items-center gap-2 text-xs font-mono text-teal-600 dark:text-teal-400 bg-teal-500/10 px-3 py-1 rounded-full border border-teal-500/20">
                 <Filter className="w-3.5 h-3.5" />
                 <span>{selectedCategoryFilter || 'All Crime Vectors'}</span>
               </div>
@@ -320,9 +320,9 @@ export const OverviewView: React.FC = () => {
                   </PieChart>
                 </ResponsiveContainer>
 
-                {/* Big Number Centered inside Gauge (positioned cleanly below arc) */}
-                <div className="absolute top-[78%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none bg-[#0B0C0E]/95 border border-[#22242D] px-5 py-2 rounded-2xl shadow-2xl backdrop-blur-md">
-                  <div className="font-display font-extrabold text-3xl sm:text-4xl text-[#FFFFFF] tracking-tight tabular-nums">
+                {/* Big Number Centered inside Gauge (positioned cleanly below arc with dark slate pill) */}
+                <div className="absolute top-[78%] left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none bg-[#1E293B] border border-slate-700 px-5 py-2 rounded-2xl shadow-2xl backdrop-blur-md">
+                  <div className="font-display font-extrabold text-3xl sm:text-4xl text-white tracking-tight tabular-nums">
                     1,248
                   </div>
                   <div className="text-xs font-mono font-extrabold text-[#CCFF00] uppercase tracking-wider">
@@ -333,16 +333,16 @@ export const OverviewView: React.FC = () => {
 
               {/* Top Districts by Volume Progress Bars */}
               <div className="md:col-span-6 space-y-3.5 border-t md:border-t-0 md:border-l border-[#22242D] pt-4 md:pt-0 md:pl-6">
-                <h3 className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#E2E8F0] mb-3">
+                <h3 className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-700 dark:text-[#E2E8F0] mb-3">
                   Top Districts by Incident Volume
                 </h3>
                 {districtVolumeData.map((district) => (
                   <div key={district.name} className="space-y-1 text-xs sm:text-sm">
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-[#FFFFFF] truncate">{district.name}</span>
-                      <span className="font-mono text-[#E2E8F0] font-bold text-xs">{district.count} ({district.pct}%)</span>
+                      <span className="font-bold text-[#0F172A] dark:text-[#FFFFFF] truncate">{district.name}</span>
+                      <span className="font-mono text-slate-600 dark:text-[#E2E8F0] font-bold text-xs">{district.count} ({district.pct}%)</span>
                     </div>
-                    <div className="w-full bg-[#0B0C0E] h-2.5 rounded-full overflow-hidden border border-[#22242D]">
+                    <div className="w-full bg-slate-200 dark:bg-[#0B0C0E] h-2.5 rounded-full overflow-hidden border border-[#22242D]">
                       <div
                         className="h-full rounded-full transition-all duration-500"
                         style={{ width: `${district.pct}%`, backgroundColor: district.color }}
@@ -364,7 +364,7 @@ export const OverviewView: React.FC = () => {
                     className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs sm:text-sm font-extrabold transition-all ${
                       isSelected
                         ? 'bg-[#CCFF00] text-slate-950 shadow-glow-teal border border-[#CCFF00]'
-                        : 'bg-[#1B1C24] text-[#E2E8F0] hover:text-[#FFFFFF] border border-[#22242D]'
+                        : 'bg-slate-100 dark:bg-[#1B1C24] text-slate-700 dark:text-[#E2E8F0] hover:text-[#0F172A] dark:hover:text-[#FFFFFF] border border-slate-200 dark:border-[#22242D]'
                     }`}
                   >
                     <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs" style={{ backgroundColor: `${cat.color}35` }}>

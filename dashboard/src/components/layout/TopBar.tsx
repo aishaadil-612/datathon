@@ -12,7 +12,9 @@ import {
   Sparkles,
   GitFork,
   Clock,
-  ShieldCheck
+  ShieldCheck,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { useDashboardStore } from '../../store/useDashboardStore';
 import { useRouterStore, AppView } from '../../store/useRouterStore';
@@ -30,7 +32,9 @@ export const TopBar: React.FC = () => {
     globalSearchQuery,
     setGlobalSearchQuery,
     alertCount,
-    clearAlerts
+    clearAlerts,
+    themeMode,
+    toggleThemeMode
   } = useDashboardStore();
 
   const { activeView, setActiveView } = useRouterStore();
@@ -216,6 +220,25 @@ export const TopBar: React.FC = () => {
                 </div>
               )}
             </div>
+
+            {/* Theme Switcher Toggle Button (Dark / Light Theme) */}
+            <button
+              onClick={toggleThemeMode}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#14151B] theme-card hover:bg-[#1B1C24] border border-[#22242D] theme-border rounded-full text-xs font-mono font-bold text-[#FFFFFF] theme-text transition-all"
+              title={`Switch to ${themeMode === 'dark' ? 'Light' : 'Dark'} Theme`}
+            >
+              {themeMode === 'dark' ? (
+                <>
+                  <Sun className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="hidden md:inline">Light Mode</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-3.5 h-3.5 text-indigo-500" />
+                  <span className="hidden md:inline">Dark Mode</span>
+                </>
+              )}
+            </button>
 
             {/* Language Toggle */}
             <button

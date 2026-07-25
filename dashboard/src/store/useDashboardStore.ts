@@ -38,6 +38,10 @@ interface DashboardState {
     isMinimized: boolean;
   };
 
+  // Theme mode
+  themeMode: 'dark' | 'light';
+  toggleThemeMode: () => void;
+
   // Alerts
   alertCount: number;
 
@@ -99,7 +103,22 @@ export const useDashboardStore = create<DashboardState>((set) => ({
     isMinimized: false,
   },
 
+  themeMode: 'dark',
   alertCount: 3,
+
+  toggleThemeMode: () => set((state) => {
+    const nextMode = state.themeMode === 'dark' ? 'light' : 'dark';
+    if (typeof document !== 'undefined') {
+      if (nextMode === 'light') {
+        document.documentElement.classList.add('light-theme');
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.remove('light-theme');
+        document.documentElement.classList.add('dark');
+      }
+    }
+    return { themeMode: nextMode };
+  }),
 
   setActiveView: (view) => set({ activeView: view }),
   setRole: (role) => set({ role }),

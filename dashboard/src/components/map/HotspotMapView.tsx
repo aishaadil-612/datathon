@@ -44,6 +44,7 @@ export const HotspotMapView: React.FC = () => {
     toggleForecast,
     setTimeHorizon,
     language,
+    themeMode,
     setSelectedCaseId,
     setActiveView,
     openExplainability
@@ -161,10 +162,15 @@ export const HotspotMapView: React.FC = () => {
             scrollWheelZoom={true}
             style={{ height: '100%', width: '100%' }}
           >
-            {/* Dark Tile Layer (CartoDB Dark Matter) */}
+            {/* Dynamic Tile Layer (CartoDB Dark Matter / Voyager Light) */}
             <TileLayer
+              key={themeMode}
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+              url={
+                themeMode === 'light'
+                  ? "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                  : "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+              }
             />
 
             {/* Confirmed Hotspot Circles */}
