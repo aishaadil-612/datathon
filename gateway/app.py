@@ -4,6 +4,13 @@ from config.settings import settings, BASE_DIR
 from gateway.routers.auth import LoginRequest, authenticate_user
 from gateway.routers.copilot import CopilotQueryRequest, handle_copilot_query
 from gateway.routers.dashboard import get_dashboard_summary
+from gateway.routers.fir import (
+    ComplaintIntakeRequest, handle_complaint_intake,
+    AadhaarOCRRequest, handle_aadhaar_ocr,
+    FIRDraftRequest, handle_fir_draft,
+    AuthenticityVerifyRequest, handle_verify_authenticity,
+    FIRApproveRequest, handle_fir_approve
+)
 
 from pathlib import Path
 
@@ -69,6 +76,26 @@ if USE_FASTAPI:
     async def dashboard_summary():
         return await get_dashboard_summary()
 
+    # FIR Assistant Routes
+    @app.post("/api/v1/fir/intake")
+    async def fir_intake(req: ComplaintIntakeRequest):
+        return await handle_complaint_intake(req)
+
+    @app.post("/api/v1/fir/verify-aadhaar")
+    async def fir_verify_aadhaar(req: AadhaarOCRRequest):
+        return await handle_aadhaar_ocr(req)
+
+    @app.post("/api/v1/fir/draft")
+    async def fir_draft(req: FIRDraftRequest):
+        return await handle_fir_draft(req)
+
+    @app.post("/api/v1/fir/verify-authenticity")
+    async def fir_verify_authenticity(req: AuthenticityVerifyRequest):
+        return await handle_verify_authenticity(req)
+
+    @app.post("/api/v1/fir/approve")
+    async def fir_approve(req: FIRApproveRequest):
+        return await handle_fir_approve(req)
+
 else:
     logger.warning("FastAPI not detected in environment. Application running in fallback mode.")
-

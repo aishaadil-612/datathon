@@ -7,6 +7,7 @@ from agents.copilot.tools.rag import execute_rag_search
 from agents.copilot.tools.translator import execute_kannada_translate
 from agents.case_intel.agent import case_intel_agent
 from agents.analytics.agent import analytics_agent
+from agents.fir_assistant.agent import fir_assistant_agent
 from agents.copilot.senior_detective import senior_detective_agent
 
 logger = logging.getLogger("argus.agents.copilot.orchestrator")
@@ -22,7 +23,9 @@ class QueryRouterAgent:
 
     def classify_intent(self, prompt: str) -> str:
         prompt_lower = prompt.lower()
-        if any(k in prompt_lower for k in ["hotspot", "density", "cluster", "risk score", "forecast", "prediction"]):
+        if any(k in prompt_lower for k in ["draft fir", "register fir", "file fir", "complaint", "fir assistant", "first information report", "police complaint", "cognizable", "fir registration"]):
+            return "FIR_ASSISTANT"
+        elif any(k in prompt_lower for k in ["hotspot", "density", "cluster", "risk score", "forecast", "prediction"]):
             return "ANALYTICS"
         elif any(k in prompt_lower for k in ["network", "associate", "suspect", "similarity", "timeline", "modus operandi", "mo vector"]):
             return "CASE_INTEL"
@@ -80,7 +83,19 @@ class QueryRouterAgent:
         tool_result: Dict[str, Any] = {}
         target_agent = "Copilot Agent"
 
-        if intent == "ANALYTICS":
+        if intent == "FIR_ASSISTANT":
+            target_agent = "AI FIR Assistant Agent (Drafting & Authenticity Engine)"
+            reasoning_steps.append({
+                "id": "step-2",
+                "phase": "SUB_AGENT_DELEGATION",
+                "title": "Delegated to AI FIR Assistant Sub-Agent",
+                "status": "COMPLETED",
+                "agent": target_agent,
+                "details": "Initiated complaint intake, IPC/BNS crime classification, draft FIR generation, and authenticity risk scoring."
+            })
+            tool_result = await fir_assistant_agent.run("full_fir_pipeline", user_id, role, complaint_text=working_prompt)
+
+        elif intent == "ANALYTICS":
             target_agent = "Analytics Agent (ST-DBSCAN & XGBoost)"
             reasoning_steps.append({
                 "id": "step-2",

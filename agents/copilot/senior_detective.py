@@ -10,7 +10,7 @@ class SeniorDetectiveAgent:
     """
     Top-Level Conversational Agent: Senior Lead Detective V. R. Rao.
     - Veteran of 20,000+ solved cases across Cyber, Organized Crime, Homicide & Financial Syndicates.
-    - Receives field reports from specialized sub-agents (Analytics, Graph, SQL, RAG, Neural Translator).
+    - Receives field reports from specialized sub-agents (Analytics, Graph, SQL, RAG, Neural Translator, FIR Assistant).
     - Analyzes cross-crime patterns against compressed event-based resolution bank.
     - Formulates natural language detective responses with tradecraft insights and victim assistance plans.
     """
@@ -46,7 +46,6 @@ class SeniorDetectiveAgent:
         )
 
     def _load_1000_cases_bank(self) -> List[Dict[str, Any]]:
-        json_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data", "cases_db_1000.json")
         cases_bank = [
             {
                 "pattern_id": "PAT-842",
@@ -178,7 +177,12 @@ class SeniorDetectiveAgent:
         }
 
     def _extract_subagent_summary(self, intent: str, data: Dict[str, Any]) -> str:
-        if intent == "ANALYTICS":
+        if intent == "FIR_ASSISTANT":
+            draft_info = data.get("draft", {}).get("fir_draft", {})
+            verifier = data.get("verifier", {})
+            risk_level = verifier.get("fraud_risk_assessment", {}).get("risk_level", "LOW")
+            return f"AI FIR Assistant generated draft '{draft_info.get('draft_id', 'DRAFT')}' under {draft_info.get('crime_category', 'Crime Category')} ({draft_info.get('applicable_legal_sections', {}).get('bns_sections', ['BNS'])[0]}). Fraud Risk: {risk_level}. Status: PENDING_POLICE_APPROVAL."
+        elif intent == "ANALYTICS":
             if "hotspots" in data:
                 return f"Analytics Unit identified {len(data.get('hotspots', []))} crime density clusters using ST-DBSCAN."
             return f"Analytics Unit calculated risk index score: {data.get('risk_score', 0.88)*100:.1f}% for target area/suspect."

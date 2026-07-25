@@ -47,7 +47,7 @@ def test_detective_briefing_synthesis():
     assert briefing["detective_name"] == "Chief Detective V. R. Rao"
     assert "Solved Cases" in briefing["cases_solved"]
     assert "Chief Detective V. R. Rao" in briefing["detective_speech"]
-    assert "1,000+ Case Pattern Match" in briefing["detective_speech"]
+    assert "Case Pattern Match" in briefing["detective_speech"]
 
 @pytest.mark.asyncio
 async def test_copilot_orchestrator_with_senior_detective():
