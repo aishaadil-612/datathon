@@ -226,50 +226,62 @@ export const OverviewView: React.FC = () => {
       {/* ROW 2: COMPACT SECONDARY KPI TRIO */}
       {/* ------------------------------------------------------------- */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
-        <div className="bg-[#14151B] border border-[#22242D] hover:border-rose-500/40 rounded-[20px] px-5 py-4 flex items-center justify-between transition-colors shadow-sm">
+        <motion.div 
+          whileHover={{ translateY: -2, scale: 1.01 }}
+          transition={{ duration: 0.15 }}
+          className="bg-slate-50 dark:bg-[#14151B] border border-slate-200 dark:border-[#22242D] hover:border-rose-500/40 dark:hover:border-rose-500/40 rounded-[20px] px-5 py-4 flex items-center justify-between transition-all shadow-sm"
+        >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-rose-500/20 text-rose-500 flex items-center justify-center font-bold">
               <MapPin className="w-5 h-5" />
             </div>
             <div>
               <span className="text-xs sm:text-sm font-bold text-slate-700 dark:text-[#E2E8F0] block">High-Risk Spatial Zones</span>
-              <div className="font-display font-extrabold text-xl sm:text-2xl text-[#0F172A] dark:text-[#FFFFFF]">06 Sectors</div>
+              <div className="font-display font-extrabold text-xl sm:text-2xl text-slate-900 dark:text-[#FFFFFF]">06 Sectors</div>
             </div>
           </div>
           <span className="px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-600 dark:text-rose-300 text-xs font-extrabold font-mono border border-rose-500/30">
             +2 PREDICTED
           </span>
-        </div>
+        </motion.div>
 
-        <div className="bg-[#14151B] border border-[#22242D] hover:border-teal-500/40 rounded-[20px] px-5 py-4 flex items-center justify-between transition-colors shadow-sm">
+        <motion.div 
+          whileHover={{ translateY: -2, scale: 1.01 }}
+          transition={{ duration: 0.15 }}
+          className="bg-slate-50 dark:bg-[#14151B] border border-slate-200 dark:border-[#22242D] hover:border-teal-500/40 dark:hover:border-teal-500/40 rounded-[20px] px-5 py-4 flex items-center justify-between transition-all shadow-sm"
+        >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-teal-500/20 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
               <span className="text-xs sm:text-sm font-bold text-slate-700 dark:text-[#E2E8F0] block">Case Resolution Rate</span>
-              <div className="font-display font-extrabold text-xl sm:text-2xl text-[#0F172A] dark:text-[#FFFFFF]">82.4%</div>
+              <div className="font-display font-extrabold text-xl sm:text-2xl text-slate-900 dark:text-[#FFFFFF]">82.4%</div>
             </div>
           </div>
           <span className="px-2.5 py-1 rounded-full bg-teal-500/20 text-teal-700 dark:text-teal-300 text-xs font-extrabold font-mono border border-teal-500/30">
             ▲ +4.5% MoM
           </span>
-        </div>
+        </motion.div>
 
-        <div className="bg-[#14151B] border border-[#22242D] hover:border-amber-500/40 rounded-[20px] px-5 py-4 flex items-center justify-between transition-colors shadow-sm">
+        <motion.div 
+          whileHover={{ translateY: -2, scale: 1.01 }}
+          transition={{ duration: 0.15 }}
+          className="bg-slate-50 dark:bg-[#14151B] border border-slate-200 dark:border-[#22242D] hover:border-amber-500/40 dark:hover:border-amber-500/40 rounded-[20px] px-5 py-4 flex items-center justify-between transition-all shadow-sm"
+        >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
               <Zap className="w-5 h-5" />
             </div>
             <div>
               <span className="text-xs sm:text-sm font-bold text-slate-700 dark:text-[#E2E8F0] block">Cases Filed Today</span>
-              <div className="font-display font-extrabold text-xl sm:text-2xl text-[#0F172A] dark:text-[#FFFFFF]">35 Incidents</div>
+              <div className="font-display font-extrabold text-xl sm:text-2xl text-slate-900 dark:text-[#FFFFFF]">35 Incidents</div>
             </div>
           </div>
           <span className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 text-xs font-extrabold font-mono border border-amber-500/30">
             ▲ +8.2%
           </span>
-        </div>
+        </motion.div>
       </div>
 
       {/* ------------------------------------------------------------- */}
