@@ -1,0 +1,9 @@
+{
+  "name": "crimelens-datathon-scrb",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CrimeLens - SCRB Karnataka AI Crime Intelligence Platform",
+  "scripts": {
+    "build": "npm run build --prefix dashboard"
+  }
+}
