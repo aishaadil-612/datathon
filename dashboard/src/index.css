@@ -54,6 +54,39 @@ html.light-theme .text-\[\#9FA4B2\] {
   color: #64748B !important;
 }
 
+/* HIGH-CONTRAST GREEN & LIME LIGHT MODE OVERRIDES */
+html.light-theme .text-\[\#CCFF00\] {
+  color: #15803D !important; /* High contrast Green-700 */
+}
+
+html.light-theme .bg-\[\#CCFF00\]\/10,
+html.light-theme .bg-\[\#CCFF00\]\/15,
+html.light-theme .bg-\[\#CCFF00\]\/20 {
+  background-color: #DCFCE7 !important; /* Soft Green-100 badge */
+  color: #166534 !important; /* High contrast Green-800 text */
+  border-color: #86EFAC !important; /* Crisp Green-300 border */
+}
+
+html.light-theme .border-\[\#CCFF00\]\/20,
+html.light-theme .border-\[\#CCFF00\]\/30,
+html.light-theme .border-\[\#CCFF00\]\/40 {
+  border-color: #86EFAC !important;
+}
+
+html.light-theme .bg-\[\#CCFF00\] {
+  background-color: #16A34A !important; /* Rich Green-600 button background */
+  color: #FFFFFF !important; /* Pure white text for buttons */
+}
+
+html.light-theme .bg-\[\#CCFF00\]:hover {
+  background-color: #15803D !important;
+}
+
+html.light-theme .drop-shadow-glow-teal,
+html.light-theme .shadow-glow-teal {
+  box-shadow: 0 0 15px rgba(22, 163, 74, 0.25) !important;
+}
+
 /* Header & Sidebar in Light Mode */
 html.light-theme header,
 html.light-theme aside {
