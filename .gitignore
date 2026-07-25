@@ -1,0 +1,33 @@
+# Environment variables and secrets
+.env
+.env*.local
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+env/
+ENV/
+
+# Node / Frontend build artifacts
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+.next/
+**/.next/
+out/
+build/
+
+# Logs & Temporary files
+*.log
+.tmp/
+.DS_Store
+Thumbs.db

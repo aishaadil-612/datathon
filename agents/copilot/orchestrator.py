@@ -1,0 +1,244 @@
+import logging
+from typing import Dict, Any, List
+from governance.middleware import governance_mw
+from agents.copilot.tools.nl2sql import execute_nl2sql
+from agents.copilot.tools.nl2cypher import execute_nl2cypher
+from agents.copilot.tools.rag import execute_rag_search
+from agents.copilot.tools.translator import execute_kannada_translate
+from agents.case_intel.agent import case_intel_agent
+from agents.analytics.agent import analytics_agent
+from agents.copilot.senior_detective import senior_detective_agent
+
+logger = logging.getLogger("argus.agents.copilot.orchestrator")
+
+class QueryRouterAgent:
+    """Agent #1: Query Router Agent. Single entry point with IndicTrans2 Kannada pre-translation layer."""
+
+    def __init__(self):
+        self.session_memory: Dict[str, List[Dict[str, str]]] = {}
+
+    def is_kannada(self, text: str) -> bool:
+        return any('\u0C80' <= char <= '\u0CFF' for char in text) or any(k in text.lower() for k in ["ಕನ್ನಡ", "ಅನುವಾದ"])
+
+    def classify_intent(self, prompt: str) -> str:
+        prompt_lower = prompt.lower()
+        if any(k in prompt_lower for k in ["hotspot", "density", "cluster", "risk score", "forecast", "prediction"]):
+            return "ANALYTICS"
+        elif any(k in prompt_lower for k in ["network", "associate", "suspect", "similarity", "timeline", "modus operandi", "mo vector"]):
+            return "CASE_INTEL"
+        elif any(k in prompt_lower for k in ["graph", "cypher", "nodes", "relationships"]):
+            return "NL2CYPHER"
+        elif any(k in prompt_lower for k in ["fir", "sql", "database", "find", "search", "show"]):
+            return "NL2SQL"
+        else:
+            return "RAG"
+
+    async def process_investigator_query(self, user_id: str, role: str, prompt: str, session_id: str = "default_session") -> Dict[str, Any]:
+        logger.info(f"Query Router Agent processing query from User: '{user_id}' ({role}) => '{prompt}'")
+
+        # 1. Update session memory
+        if session_id not in self.session_memory:
+            self.session_memory[session_id] = []
+        self.session_memory[session_id].append({"role": "user", "content": prompt})
+
+        # 2. IndicTrans2 Kannada Pre-Translation Layer
+        was_kannada = self.is_kannada(prompt)
+        working_prompt = prompt
+        translation_step = None
+
+        if was_kannada:
+            trans_res = await execute_kannada_translate(prompt)
+            working_prompt = trans_res.get("translated_text", prompt)
+            logger.info(f"Kannada Pre-Translation Layer: '{prompt}' => '{working_prompt}'")
+            translation_step = {
+                "id": "trans-pre",
+                "phase": "KANNADA_TRANSLATION",
+                "title": "IndicTrans2 Pre-Translation Applied",
+                "status": "COMPLETED",
+                "agent": "Bilingual Translation Layer",
+                "details": f"Translated Kannada query to English: '{working_prompt}' before routing."
+            }
+
+        # 3. Classify Intent & Init Reasoning Steps Log
+        intent = self.classify_intent(working_prompt)
+        logger.info(f"Classified query intent: {intent}")
+
+        reasoning_steps = []
+        if translation_step:
+            reasoning_steps.append(translation_step)
+
+        reasoning_steps.append({
+            "id": "step-1",
+            "phase": "INTENT_CLASSIFICATION",
+            "title": "Intent Classification & Agent Routing",
+            "status": "COMPLETED",
+            "agent": "Query Router Agent",
+            "details": f"Single entry point classified intent as '{intent}' layer."
+        })
+
+        # 3. Route to Sub-Agent or Core Tool via Governance Middleware
+        tool_result: Dict[str, Any] = {}
+        target_agent = "Copilot Agent"
+
+        if intent == "ANALYTICS":
+            target_agent = "Analytics Agent (ST-DBSCAN & XGBoost)"
+            reasoning_steps.append({
+                "id": "step-2",
+                "phase": "SUB_AGENT_DELEGATION",
+                "title": "Delegated to Analytics Sub-Agent",
+                "status": "COMPLETED",
+                "agent": target_agent,
+                "details": "Initiated spatial-temporal cluster analysis and risk estimation engine."
+            })
+            if "hotspot" in prompt.lower():
+                tool_result = await analytics_agent.run("hotspot_detector", user_id, role, region="Bengaluru Urban")
+            else:
+                tool_result = await analytics_agent.run("risk_scorer", user_id, role, location_or_suspect="Central District")
+
+        elif intent == "CASE_INTEL":
+            target_agent = "Case Intelligence Agent (Neo4j & Timeline Engine)"
+            reasoning_steps.append({
+                "id": "step-2",
+                "phase": "SUB_AGENT_DELEGATION",
+                "title": "Delegated to Case Intelligence Sub-Agent",
+                "status": "COMPLETED",
+                "agent": target_agent,
+                "details": "Executing 2-hop network graph traversal and modus operandi similarity matching."
+            })
+            if "network" in prompt.lower() or "associate" in prompt.lower():
+                tool_result = await case_intel_agent.run("network_analysis", user_id, role, suspect_id="P-101")
+            elif "timeline" in prompt.lower():
+                tool_result = await case_intel_agent.run("timeline_builder", user_id, role, fir_id="FIR-2026-001")
+            else:
+                tool_result = await case_intel_agent.run("case_similarity", user_id, role, fir_id="FIR-2026-001")
+
+        elif intent == "NL2CYPHER":
+            target_agent = "Graph Intelligence Engine (NL2Cypher)"
+            reasoning_steps.append({
+                "id": "step-2",
+                "phase": "SUB_AGENT_DELEGATION",
+                "title": "Executing NL2Cypher Query Translation",
+                "status": "COMPLETED",
+                "agent": target_agent,
+                "details": "Translating natural language intent into parameterized Cypher query for Neo4j database."
+            })
+            tool_result = await governance_mw.execute_governed_tool(
+                user_id=user_id,
+                user_role=role,
+                tool_name="nl2cypher",
+                tool_func=execute_nl2cypher,
+                query_text=prompt
+            )
+
+        elif intent == "TRANSLATE":
+            target_agent = "Bilingual Neural Translator Agent"
+            reasoning_steps.append({
+                "id": "step-2",
+                "phase": "SUB_AGENT_DELEGATION",
+                "title": "Kannada-English Translation Engine Dispatched",
+                "status": "COMPLETED",
+                "agent": target_agent,
+                "details": "Processing Indic script translation and entity preservation."
+            })
+            tool_result = await governance_mw.execute_governed_tool(
+                user_id=user_id,
+                user_role=role,
+                tool_name="kannada_translate",
+                tool_func=execute_kannada_translate,
+                text=prompt
+            )
+
+        elif intent == "NL2SQL":
+            target_agent = "SQL Schema Intelligence Agent (NL2SQL)"
+            reasoning_steps.append({
+                "id": "step-2",
+                "phase": "SUB_AGENT_DELEGATION",
+                "title": "Executing Parameterized SQL Generation",
+                "status": "COMPLETED",
+                "agent": target_agent,
+                "details": "Querying PostgreSQL FIR crime records database under schema governance."
+            })
+            tool_result = await governance_mw.execute_governed_tool(
+                user_id=user_id,
+                user_role=role,
+                tool_name="nl2sql",
+                tool_func=execute_nl2sql,
+                query_text=prompt
+            )
+
+        else:  # RAG Search
+            target_agent = "Knowledge Retrieval RAG Agent"
+            reasoning_steps.append({
+                "id": "step-2",
+                "phase": "SUB_AGENT_DELEGATION",
+                "title": "Retrieval Augmented Generation Active",
+                "status": "COMPLETED",
+                "agent": target_agent,
+                "details": "Querying vector embeddings across legal FIR corpus and intelligence archives."
+            })
+            tool_result = await governance_mw.execute_governed_tool(
+                user_id=user_id,
+                user_role=role,
+                tool_name="rag_search",
+                tool_func=execute_rag_search,
+                query_text=prompt
+            )
+
+        # 4. Governance Step
+        gov_explanation = tool_result.get("governance", {}).get("explanation", {})
+        reasoning_steps.append({
+            "id": "step-3",
+            "phase": "GOVERNANCE_AUDIT",
+            "title": "SHAP Governance & Audit Log Verification",
+            "status": "COMPLETED",
+            "agent": "Governance Middleware",
+            "details": f"RBAC verified for role '{role}'. SHAP rationale: {gov_explanation.get('natural_language_rationale', 'Audit logged to immutable store.')}"
+        })
+
+        # 5. Top-Level Conversational Agent: Senior Detective (1,000+ Cases Solved & Pattern Engine)
+        field_report = senior_detective_agent.format_subagent_field_report(intent, target_agent, tool_result)
+        matched_patterns = senior_detective_agent.match_crime_patterns(working_prompt, tool_result)
+        detective_synthesis = senior_detective_agent.synthesize_detective_briefing(
+            prompt=working_prompt,
+            intent=intent,
+            field_report=field_report,
+            matched_patterns=matched_patterns,
+            role=role
+        )
+
+        brain_summary = field_report["findings_summary"]
+        top_pattern = matched_patterns[0]
+
+        reasoning_steps.append({
+            "id": "step-4",
+            "phase": "SENIOR_DETECTIVE_SYNTHESIS",
+            "title": "Senior Detective Cross-Crime Pattern Analysis",
+            "status": "COMPLETED",
+            "agent": senior_detective_agent.badge_title,
+            "details": f"Chief Detective V. R. Rao received sub-agent report ({target_agent}) and cross-matched pattern: '{top_pattern['title']}' ({top_pattern['pattern_id']})."
+        })
+
+        response_text = detective_synthesis["detective_speech"]
+
+        self.session_memory[session_id].append({"role": "assistant", "content": response_text})
+
+        return {
+            "session_id": session_id,
+            "intent": intent,
+            "prompt": prompt,
+            "response": response_text,
+            "brain_summary": brain_summary,
+            "detective_persona": {
+                "badge_title": senior_detective_agent.badge_title,
+                "cases_solved": senior_detective_agent.cases_solved,
+                "experience_years": senior_detective_agent.experience_years
+            },
+            "field_report": field_report,
+            "matched_patterns": matched_patterns,
+            "reasoning_steps": reasoning_steps,
+            "tool_result": tool_result,
+            "history_length": len(self.session_memory[session_id])
+        }
+
+copilot_orchestrator = QueryRouterAgent()
+query_router_agent = copilot_orchestrator
