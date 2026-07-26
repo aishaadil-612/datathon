@@ -34,13 +34,24 @@ if USE_FASTAPI:
         version="1.0.0"
     )
 
+    # CORS must list explicit origins when allow_credentials=True.
+    # Using ["*"] with credentials=True is invalid per RFC and browsers reject it.
+    ALLOWED_ORIGINS = [
+        "https://crimelens-ksp.netlify.app",
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:5173",
+    ]
+
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
+        allow_origins=ALLOWED_ORIGINS,
+        allow_credentials=False,
+        allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allow_headers=["Content-Type", "Authorization", "Accept", "X-Requested-With"],
     )
+
 
     @app.get("/", response_class=HTMLResponse)
     @app.get("/dashboard", response_class=HTMLResponse)
