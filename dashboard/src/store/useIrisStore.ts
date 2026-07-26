@@ -217,9 +217,13 @@ export const useIrisStore = create<IrisState>((set, get) => ({
     const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || (import.meta as any).env?.VITE_API_URL || 'https://datathon-ziw6.onrender.com';
 
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
+
       const res = await fetch(`${API_BASE}/api/v1/copilot/query`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
         body: JSON.stringify({
           user_id: "investigator_user_1",
           role: role,
@@ -227,6 +231,8 @@ export const useIrisStore = create<IrisState>((set, get) => ({
           session_id: currentSessionId
         })
       });
+
+      clearTimeout(timeoutId);
 
       if (!res.ok) throw new Error(`HTTP Error ${res.status}`);
       const data = await res.json();
