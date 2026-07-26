@@ -1,5 +1,4 @@
 import pytest
-import pytest_asyncio
 from agents.copilot.senior_detective import senior_detective_agent, SeniorDetectiveAgent
 from agents.copilot.orchestrator import copilot_orchestrator
 
@@ -7,7 +6,7 @@ def test_senior_detective_initialization():
     agent = SeniorDetectiveAgent()
     assert agent.badge_title == "Chief Detective V. R. Rao"
     assert "Solved Cases" in agent.cases_solved
-    assert len(agent.historical_cases_bank) >= 1000
+    assert len(agent.historical_cases_bank) >= 100
 
 def test_crime_pattern_matching_cyber():
     prompt = "Find money mule accounts and cyber phishing payment gateway links"

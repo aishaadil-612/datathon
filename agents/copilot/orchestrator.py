@@ -35,35 +35,55 @@ class QueryRouterAgent:
         prompt_lower = prompt.lower()
         prompt_clean = prompt_lower.strip(" !.,?")
         greetings = ["hi", "hello", "hey", "greetings", "good morning", "good afternoon", "good evening", "who are you", "what can you do", "help", "start"]
+
         if prompt_clean in greetings or any(prompt_clean == g for g in greetings):
             return "GREETING"
+
+        # Explicit FIR Drafting / Filing ONLY (Do NOT match cross-case analysis)
         elif any(k in prompt_lower for k in [
-            "draft fir", "register fir", "file fir", "complaint", "fir assistant",
-            "first information report", "police complaint", "cognizable", "fir registration",
-            "received a call", "disappeared", "account", "otp", "bank", "installed",
-            "transferred", "stolen", "stole", "robbed", "loss of", "rupees", "₹",
-            "cheated", "fraud", "scam", "apk", "app", "fake call", "caller", "stolen vehicle", "burglary", "cyber"
+            "draft fir", "register fir", "file fir", "file e-fir", "complaint intake",
+            "register complaint", "first information report", "file a police complaint", "file police complaint"
         ]):
             return "FIR_ASSISTANT"
+
         elif any(k in prompt_lower for k in ["hotspot", "density", "cluster", "risk score", "forecast", "prediction"]):
             return "ANALYTICS"
-        elif any(k in prompt_lower for k in ["network", "associate", "suspect", "similarity", "timeline", "modus operandi", "mo vector"]):
+
+        elif any(k in prompt_lower for k in [
+            "cross-case", "analysis", "intelligence", "investigation", "multi-hop",
+            "network", "associate", "suspect", "similarity", "timeline", "modus operandi",
+            "mo vector", "evidence", "firs", "cases", "patterns", "compare", "correlate",
+            "linkage", "relationship", "anpr", "cctv", "utr", "transaction"
+        ]):
             return "CASE_INTEL"
+
         elif any(k in prompt_lower for k in ["graph", "cypher", "nodes", "relationships"]):
             return "NL2CYPHER"
-        elif any(k in prompt_lower for k in ["fir", "sql", "database", "find", "search", "show"]):
-            return "NL2SQL"
-        else:
-            return "RAG"
 
-    async def process_investigator_query(self, user_id: str = "user1", role: str = "User", prompt: str = "", session_id: str = "default_session") -> Dict[str, Any]:
-        logger.info(f"Query Router Agent processing query from User: '{user_id}' ({role}) => '{prompt}'")
+        elif any(k in prompt_lower for k in ["sql", "database query", "table", "schema"]):
+            return "NL2SQL"
+
+        else:
+            return "CASE_INTEL"
+
+    async def process_investigator_query(
+        self,
+        user_id: str = "user1",
+        role: str = "User",
+        prompt: str = "",
+        session_id: str = "default_session"
+    ) -> Dict[str, Any]:
+        logger.info(f"Query Router Agent processing query from User: '{user_id}' ({role}) | Session: '{session_id}' => '{prompt}'")
 
         # 1. Session Memory Cleanup & Multi-Turn History
         self._cleanup_expired_sessions()
         now = time.time()
         if session_id not in self.session_memory:
-            self.session_memory[session_id] = {"last_accessed": now, "messages": []}
+            self.session_memory[session_id] = {
+                "last_accessed": now,
+                "messages": [],
+                "primary_intent": None
+            }
         else:
             self.session_memory[session_id]["last_accessed"] = now
 
@@ -88,9 +108,19 @@ class QueryRouterAgent:
                 "details": f"Translated Kannada query to English: '{working_prompt}' before routing."
             }
 
-        # 3. Classify Intent & Init Reasoning Steps Log
-        intent = self.classify_intent(working_prompt)
-        logger.info(f"Classified query intent: {intent}")
+        # 3. Classify Intent (with Session Context Continuity)
+        raw_intent = self.classify_intent(working_prompt)
+        
+        # If continuing an ongoing investigation session, preserve investigation intent
+        session_primary_intent = self.session_memory[session_id].get("primary_intent")
+        if prior_messages and session_primary_intent and raw_intent not in ["GREETING", "FIR_ASSISTANT"]:
+            intent = session_primary_intent
+        else:
+            intent = raw_intent
+            if intent not in ["GREETING"]:
+                self.session_memory[session_id]["primary_intent"] = intent
+
+        logger.info(f"Classified query intent: {intent} (raw: {raw_intent})")
 
         reasoning_steps = []
         if translation_step:
@@ -102,10 +132,10 @@ class QueryRouterAgent:
             "title": "Intent Classification & Agent Routing",
             "status": "COMPLETED",
             "agent": "Query Router Agent",
-            "details": f"Single entry point classified intent as '{intent}' layer."
+            "details": f"Classified intent as '{intent}' for user role '{role}'."
         })
 
-        # 3. Route to Sub-Agent or Core Tool via Governance Middleware
+        # 4. Route to Sub-Agent or Core Tool via Governance Middleware
         tool_result: Dict[str, Any] = {}
         target_agent = "Copilot Agent"
 
@@ -117,7 +147,7 @@ class QueryRouterAgent:
                 "title": "Conversational Greeting Processing",
                 "status": "COMPLETED",
                 "agent": target_agent,
-                "details": "Recognized general greeting/help query. Prepared copilot overview and tactical capabilities."
+                "details": "Recognized general greeting query. Prepared copilot overview and tactical capabilities."
             })
             tool_result = {"status": "success", "message": "Greeting intent processed successfully."}
 
@@ -129,7 +159,7 @@ class QueryRouterAgent:
                 "title": "Delegated to AI FIR Assistant Sub-Agent",
                 "status": "COMPLETED",
                 "agent": target_agent,
-                "details": "Initiated complaint intake, IPC/BNS crime classification, draft FIR generation, and authenticity risk scoring."
+                "details": "Initiated complaint drafting, BNS legal classification, and risk scoring."
             })
             tool_result = await fir_assistant_agent.run("full_fir_pipeline", user_id, role, complaint_text=working_prompt)
 
@@ -143,7 +173,7 @@ class QueryRouterAgent:
                 "agent": target_agent,
                 "details": "Initiated spatial-temporal cluster analysis and risk estimation engine."
             })
-            if "hotspot" in prompt.lower():
+            if "hotspot" in working_prompt.lower():
                 tool_result = await analytics_agent.run("hotspot_detector", user_id, role, region="Bengaluru Urban")
             else:
                 tool_result = await analytics_agent.run("risk_scorer", user_id, role, location_or_suspect="Central District")
@@ -156,11 +186,11 @@ class QueryRouterAgent:
                 "title": "Delegated to Case Intelligence Sub-Agent",
                 "status": "COMPLETED",
                 "agent": target_agent,
-                "details": "Executing 2-hop network graph traversal and modus operandi similarity matching."
+                "details": "Executing 2-hop network graph traversal, FIR cross-referencing, and modus operandi similarity matching."
             })
-            if "network" in prompt.lower() or "associate" in prompt.lower():
+            if "network" in working_prompt.lower() or "associate" in working_prompt.lower() or "graph" in working_prompt.lower():
                 tool_result = await case_intel_agent.run("network_analysis", user_id, role, suspect_id="P-101")
-            elif "timeline" in prompt.lower():
+            elif "timeline" in working_prompt.lower():
                 tool_result = await case_intel_agent.run("timeline_builder", user_id, role, fir_id="FIR-2026-001")
             else:
                 tool_result = await case_intel_agent.run("case_similarity", user_id, role, fir_id="FIR-2026-001")
@@ -180,25 +210,7 @@ class QueryRouterAgent:
                 user_role=role,
                 tool_name="nl2cypher",
                 tool_func=execute_nl2cypher,
-                query_text=prompt
-            )
-
-        elif intent == "TRANSLATE":
-            target_agent = "Bilingual Neural Translator Agent"
-            reasoning_steps.append({
-                "id": "step-2",
-                "phase": "SUB_AGENT_DELEGATION",
-                "title": "Kannada-English Translation Engine Dispatched",
-                "status": "COMPLETED",
-                "agent": target_agent,
-                "details": "Processing Indic script translation and entity preservation."
-            })
-            tool_result = await governance_mw.execute_governed_tool(
-                user_id=user_id,
-                user_role=role,
-                tool_name="kannada_translate",
-                tool_func=execute_kannada_translate,
-                text=prompt
+                query_text=working_prompt
             )
 
         elif intent == "NL2SQL":
@@ -216,7 +228,7 @@ class QueryRouterAgent:
                 user_role=role,
                 tool_name="nl2sql",
                 tool_func=execute_nl2sql,
-                query_text=prompt
+                query_text=working_prompt
             )
 
         else:  # RAG Search
@@ -234,10 +246,10 @@ class QueryRouterAgent:
                 user_role=role,
                 tool_name="rag_search",
                 tool_func=execute_rag_search,
-                query_text=prompt
+                query_text=working_prompt
             )
 
-        # 4. Governance Step
+        # 5. Governance Step
         gov_explanation = tool_result.get("governance", {}).get("explanation", {})
         reasoning_steps.append({
             "id": "step-3",
@@ -248,11 +260,11 @@ class QueryRouterAgent:
             "details": f"RBAC verified for role '{role}'. SHAP rationale: {gov_explanation.get('natural_language_rationale', 'Audit logged to immutable store.')}"
         })
 
-        # 5. Top-Level Conversational Agent: Senior Detective (1,000+ Cases Solved & Pattern Engine)
+        # 6. Senior Detective Synthesis
         field_report = senior_detective_agent.format_subagent_field_report(intent, target_agent, tool_result)
-        
+
         if intent == "GREETING":
-            matched_patterns = [{ "case_id": "IRIS-COPILOT-GUIDE", "title": "IRIS Intelligence Suite Overview", "type": "System Overview" }]
+            matched_patterns = [{"case_id": "IRIS-COPILOT-GUIDE", "title": "IRIS Intelligence Suite Overview", "type": "System Overview"}]
             brain_summary = "IRIS AI Detective Copilot initialized and ready for precinct queries."
         else:
             matched_patterns = senior_detective_agent.match_crime_patterns(working_prompt, tool_result)
@@ -285,6 +297,7 @@ class QueryRouterAgent:
         })
 
         response_text = detective_synthesis["detective_speech"]
+        confidence_val = detective_synthesis.get("confidence", 92)
 
         self.session_memory[session_id]["messages"].append({"role": "assistant", "content": response_text})
 
@@ -293,6 +306,7 @@ class QueryRouterAgent:
             "intent": intent,
             "prompt": prompt,
             "response": response_text,
+            "confidence": confidence_val,
             "brain_summary": brain_summary,
             "detective_persona": {
                 "badge_title": senior_detective_agent.badge_title,
@@ -303,7 +317,7 @@ class QueryRouterAgent:
             "matched_patterns": matched_patterns,
             "reasoning_steps": reasoning_steps,
             "tool_result": tool_result,
-            "history_length": len(self.session_memory[session_id])
+            "history_length": len(self.session_memory[session_id]["messages"])
         }
 
 copilot_orchestrator = QueryRouterAgent()

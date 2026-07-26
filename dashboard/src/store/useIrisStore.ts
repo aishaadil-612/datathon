@@ -238,7 +238,7 @@ export const useIrisStore = create<IrisState>((set, get) => ({
         response: data.response || "No response generated.",
         brain_summary: data.brain_summary,
         detective_persona: data.detective_persona,
-        confidence: data.confidence || 90,
+        confidence: data.confidence !== undefined ? data.confidence : 92,
         sources: (data.matched_patterns || []).map((p: any, idx: number) => ({
           id: p.case_id || p.id || `SRC-${idx}`,
           label: p.case_id || p.title || `Record #${idx+1}`,
