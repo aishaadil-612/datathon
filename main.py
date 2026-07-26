@@ -7,6 +7,8 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(na
 logger = logging.getLogger("argus.main")
 
 if __name__ == "__main__":
-    logger.info(f"Starting {settings.APP_NAME} Gateway on http://{settings.HOST}:{settings.PORT}")
-    logger.info(f"Dashboard available at http://localhost:{settings.PORT}/dashboard")
-    uvicorn.run(app, host=settings.HOST, port=settings.PORT)
+    import os
+    port = int(os.getenv("PORT", settings.PORT))
+    host = os.getenv("HOST", "0.0.0.0")
+    logger.info(f"Starting {settings.APP_NAME} Gateway on http://{host}:{port}")
+    uvicorn.run("gateway.app:app", host=host, port=port)
