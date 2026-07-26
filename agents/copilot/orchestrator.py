@@ -1,4 +1,6 @@
 import logging
+import re
+import time
 from typing import Dict, Any, List
 from governance.middleware import governance_mw
 from agents.copilot.tools.nl2sql import execute_nl2sql
@@ -34,9 +36,9 @@ class QueryRouterAgent:
     def classify_intent(self, prompt: str) -> str:
         prompt_lower = prompt.lower()
         prompt_clean = prompt_lower.strip(" !.,?")
-        greetings = ["hi", "hello", "hey", "greetings", "good morning", "good afternoon", "good evening", "who are you", "what can you do", "help", "start"]
-
-        if prompt_clean in greetings or any(prompt_clean == g for g in greetings):
+        
+        greeting_pattern = r"\b(hi|hello|hey|greetings|good morning|good afternoon|good evening|who are you|who made you|who created you|who built you|who designed you|what is iris|what can you do|help|start|about you|tell me about yourself|who made this|who built this)\b"
+        if re.search(greeting_pattern, prompt_clean):
             return "GREETING"
 
         # Explicit FIR Drafting / Filing ONLY (Do NOT match cross-case analysis)

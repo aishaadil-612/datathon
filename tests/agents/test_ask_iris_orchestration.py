@@ -55,11 +55,24 @@ def test_ask_iris_two_message_orchestration_flow():
         assert "no matching vehicle record found" in res2["response"].lower() or "investigator supplied" in res2["response"].lower(), \
             "Unverified identifier was not properly distinguished from database facts"
         
-        return res1, res2
+        # -------------------------------------------------------------
+        # MESSAGE 3: Identity & Greeting Query
+        # -------------------------------------------------------------
+        res3 = await copilot_orchestrator.process_investigator_query(
+            user_id="test_investigator",
+            role="Investigator",
+            prompt="who are you? who made you?",
+            session_id="test_greeting_session"
+        )
+        assert res3["intent"] == "GREETING", f"Expected GREETING intent, got '{res3['intent']}'"
+        assert "Chief Detective V. R. Rao" in res3["response"]
 
-    res1, res2 = asyncio.run(run_flow())
+        return res1, res2, res3
+
+    res1, res2, res3 = asyncio.run(run_flow())
     print("\n========================================================")
     print("REGRESSION TEST PASSED SUCCESSFULLY!")
     print(f"Message 1 Intent: {res1['intent']} | Confidence: {res1['confidence']}%")
     print(f"Message 2 Intent: {res2['intent']} | Session ID: {res2['session_id']}")
+    print(f"Message 3 Intent: {res3['intent']} (Greeting/Identity query)")
     print("========================================================\n")
