@@ -17,8 +17,16 @@ except ImportError:
     class BaseSettings:  # type: ignore
         def __init__(self, **data):
             for key, val in self.__annotations__.items():
-                env_val = os.getenv(key.upper(), getattr(self, key, None))
-                setattr(self, key, env_val if env_val is not None else data.get(key))
+                env_val = os.getenv(key.upper())
+                if env_val is not None:
+                    if key.upper() in ["PORT", "POSTGRES_PORT", "ACCESS_TOKEN_EXPIRE_MINUTES", "RATE_LIMIT_PER_MINUTE"]:
+                        try:
+                            env_val = int(env_val)
+                        except ValueError:
+                            pass
+                    setattr(self, key, env_val)
+                else:
+                    setattr(self, key, data.get(key, getattr(self, key, None)))
 
         class Config:
             env_file = ".env"
