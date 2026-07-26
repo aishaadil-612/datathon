@@ -82,9 +82,12 @@ html.light-theme .bg-\[\#CCFF00\]:hover {
   background-color: #15803D !important;
 }
 
-html.light-theme .drop-shadow-glow-teal,
 html.light-theme .shadow-glow-teal {
   box-shadow: 0 0 15px rgba(22, 163, 74, 0.25) !important;
+}
+
+html.light-theme .drop-shadow-glow-teal {
+  filter: drop-shadow(0 0 8px rgba(22, 163, 74, 0.35)) !important;
 }
 
 /* Header & Sidebar in Light Mode */

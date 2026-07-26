@@ -10,20 +10,40 @@ from agents.analytics.agent import analytics_agent
 from agents.fir_assistant.agent import fir_assistant_agent
 from agents.copilot.senior_detective import senior_detective_agent
 
+import time
+
 logger = logging.getLogger("argus.agents.copilot.orchestrator")
+SESSION_TTL_SECONDS = 3600  # 1-hour session memory expiration
 
 class QueryRouterAgent:
-    """Agent #1: Query Router Agent. Single entry point with IndicTrans2 Kannada pre-translation layer."""
+    """Agent #1: Query Router Agent. Single entry point with IndicTrans2 Kannada pre-translation layer and 1-hour TTL session memory."""
 
     def __init__(self):
-        self.session_memory: Dict[str, List[Dict[str, str]]] = {}
+        self.session_memory: Dict[str, Dict[str, Any]] = {}
+
+    def _cleanup_expired_sessions(self):
+        now = time.time()
+        expired = [sid for sid, data in self.session_memory.items() if now - data.get("last_accessed", 0) > SESSION_TTL_SECONDS]
+        for sid in expired:
+            logger.info(f"Session '{sid}' expired after 1 hour of inactivity. Purging session memory.")
+            del self.session_memory[sid]
 
     def is_kannada(self, text: str) -> bool:
         return any('\u0C80' <= char <= '\u0CFF' for char in text) or any(k in text.lower() for k in ["ಕನ್ನಡ", "ಅನುವಾದ"])
 
     def classify_intent(self, prompt: str) -> str:
         prompt_lower = prompt.lower()
-        if any(k in prompt_lower for k in ["draft fir", "register fir", "file fir", "complaint", "fir assistant", "first information report", "police complaint", "cognizable", "fir registration"]):
+        prompt_clean = prompt_lower.strip(" !.,?")
+        greetings = ["hi", "hello", "hey", "greetings", "good morning", "good afternoon", "good evening", "who are you", "what can you do", "help", "start"]
+        if prompt_clean in greetings or any(prompt_clean == g for g in greetings):
+            return "GREETING"
+        elif any(k in prompt_lower for k in [
+            "draft fir", "register fir", "file fir", "complaint", "fir assistant",
+            "first information report", "police complaint", "cognizable", "fir registration",
+            "received a call", "disappeared", "account", "otp", "bank", "installed",
+            "transferred", "stolen", "stole", "robbed", "loss of", "rupees", "₹",
+            "cheated", "fraud", "scam", "apk", "app", "fake call", "caller", "stolen vehicle", "burglary", "cyber"
+        ]):
             return "FIR_ASSISTANT"
         elif any(k in prompt_lower for k in ["hotspot", "density", "cluster", "risk score", "forecast", "prediction"]):
             return "ANALYTICS"
@@ -36,13 +56,19 @@ class QueryRouterAgent:
         else:
             return "RAG"
 
-    async def process_investigator_query(self, user_id: str, role: str, prompt: str, session_id: str = "default_session") -> Dict[str, Any]:
+    async def process_investigator_query(self, user_id: str = "user1", role: str = "User", prompt: str = "", session_id: str = "default_session") -> Dict[str, Any]:
         logger.info(f"Query Router Agent processing query from User: '{user_id}' ({role}) => '{prompt}'")
 
-        # 1. Update session memory
+        # 1. Session Memory Cleanup & Multi-Turn History
+        self._cleanup_expired_sessions()
+        now = time.time()
         if session_id not in self.session_memory:
-            self.session_memory[session_id] = []
-        self.session_memory[session_id].append({"role": "user", "content": prompt})
+            self.session_memory[session_id] = {"last_accessed": now, "messages": []}
+        else:
+            self.session_memory[session_id]["last_accessed"] = now
+
+        prior_messages = list(self.session_memory[session_id]["messages"])
+        self.session_memory[session_id]["messages"].append({"role": "user", "content": prompt})
 
         # 2. IndicTrans2 Kannada Pre-Translation Layer
         was_kannada = self.is_kannada(prompt)
@@ -83,7 +109,19 @@ class QueryRouterAgent:
         tool_result: Dict[str, Any] = {}
         target_agent = "Copilot Agent"
 
-        if intent == "FIR_ASSISTANT":
+        if intent == "GREETING":
+            target_agent = "IRIS Conversational Copilot"
+            reasoning_steps.append({
+                "id": "step-2",
+                "phase": "CONVERSATIONAL_INTENT",
+                "title": "Conversational Greeting Processing",
+                "status": "COMPLETED",
+                "agent": target_agent,
+                "details": "Recognized general greeting/help query. Prepared copilot overview and tactical capabilities."
+            })
+            tool_result = {"status": "success", "message": "Greeting intent processed successfully."}
+
+        elif intent == "FIR_ASSISTANT":
             target_agent = "AI FIR Assistant Agent (Drafting & Authenticity Engine)"
             reasoning_steps.append({
                 "id": "step-2",
@@ -212,30 +250,43 @@ class QueryRouterAgent:
 
         # 5. Top-Level Conversational Agent: Senior Detective (1,000+ Cases Solved & Pattern Engine)
         field_report = senior_detective_agent.format_subagent_field_report(intent, target_agent, tool_result)
-        matched_patterns = senior_detective_agent.match_crime_patterns(working_prompt, tool_result)
+        
+        if intent == "GREETING":
+            matched_patterns = [{ "case_id": "IRIS-COPILOT-GUIDE", "title": "IRIS Intelligence Suite Overview", "type": "System Overview" }]
+            brain_summary = "IRIS AI Detective Copilot initialized and ready for precinct queries."
+        else:
+            matched_patterns = senior_detective_agent.match_crime_patterns(working_prompt, tool_result)
+            brain_summary = field_report["findings_summary"]
+
         detective_synthesis = senior_detective_agent.synthesize_detective_briefing(
             prompt=working_prompt,
             intent=intent,
             field_report=field_report,
             matched_patterns=matched_patterns,
-            role=role
+            role=role,
+            chat_history=prior_messages
         )
 
-        brain_summary = field_report["findings_summary"]
         top_pattern = matched_patterns[0]
+
+        step4_details = (
+            "Chief Detective V. R. Rao initialized copilot greeting and presented tactical system capabilities."
+            if intent == "GREETING"
+            else f"Chief Detective V. R. Rao received sub-agent report ({target_agent}) and cross-matched pattern: '{top_pattern.get('title', 'Crime Analysis')}'."
+        )
 
         reasoning_steps.append({
             "id": "step-4",
             "phase": "SENIOR_DETECTIVE_SYNTHESIS",
-            "title": "Senior Detective Cross-Crime Pattern Analysis",
+            "title": "Senior Detective Synthesis",
             "status": "COMPLETED",
             "agent": senior_detective_agent.badge_title,
-            "details": f"Chief Detective V. R. Rao received sub-agent report ({target_agent}) and cross-matched pattern: '{top_pattern['title']}' ({top_pattern['pattern_id']})."
+            "details": step4_details
         })
 
         response_text = detective_synthesis["detective_speech"]
 
-        self.session_memory[session_id].append({"role": "assistant", "content": response_text})
+        self.session_memory[session_id]["messages"].append({"role": "assistant", "content": response_text})
 
         return {
             "session_id": session_id,

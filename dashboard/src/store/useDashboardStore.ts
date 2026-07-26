@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { Role, Language, ViewType, ExplainabilityData } from '../types';
+import { apiService } from '../services/api';
 
 interface DashboardState {
   activeView: ViewType;
@@ -44,6 +45,13 @@ interface DashboardState {
 
   // Alerts
   alertCount: number;
+
+  // Backend Integration State
+  isBackendConnected: boolean;
+  backendHealth: any | null;
+  summaryData: any | null;
+  isSummaryLoading: boolean;
+  loadDashboardSummary: () => Promise<void>;
 
   // Actions
   setActiveView: (view: ViewType) => void;
@@ -105,6 +113,33 @@ export const useDashboardStore = create<DashboardState>((set) => ({
 
   themeMode: 'dark',
   alertCount: 3,
+
+  // Backend state
+  isBackendConnected: false,
+  backendHealth: null,
+  summaryData: null,
+  isSummaryLoading: false,
+
+  loadDashboardSummary: async () => {
+    set({ isSummaryLoading: true });
+    const health = await apiService.checkHealth();
+    if (health) {
+      const summary = await apiService.getDashboardSummary();
+      set({
+        isBackendConnected: true,
+        backendHealth: health,
+        summaryData: summary,
+        isSummaryLoading: false
+      });
+    } else {
+      set({
+        isBackendConnected: false,
+        backendHealth: null,
+        summaryData: null,
+        isSummaryLoading: false
+      });
+    }
+  },
 
   toggleThemeMode: () => set((state) => {
     const nextMode = state.themeMode === 'dark' ? 'light' : 'dark';

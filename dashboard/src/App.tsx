@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouterStore } from './store/useRouterStore';
+import { useDashboardStore } from './store/useDashboardStore';
 import { TopBar } from './components/layout/TopBar';
 import { Sidebar } from './components/layout/Sidebar';
 import { AskIrisSection } from './components/landing/AskIrisSection';
@@ -12,15 +13,19 @@ import { CaseSearchRecordsView } from './components/search/CaseSearchRecordsView
 import { AuditGovernanceView } from './components/audit/AuditGovernanceView';
 import { CitizenFirPortal } from './components/fir/CitizenFirPortal';
 import { ExplainabilityPanel } from './components/common/ExplainabilityPanel';
-import { SyntheticWatermark } from './components/common/SyntheticWatermark';
 
 export const App: React.FC = () => {
   const { activeView, isFirPath } = useRouterStore();
+  const { loadDashboardSummary } = useDashboardStore();
+
+  useEffect(() => {
+    loadDashboardSummary();
+  }, [loadDashboardSummary]);
 
   // If user navigates directly to /fir in browser address bar (e.g. http://localhost:3000/fir)
   const isDirectFirUrl = typeof window !== 'undefined' && window.location.pathname === '/fir';
 
-  if (isFirPath || isDirectFirUrl) {
+  if (isFirPath || isDirectFirUrl || activeView === 'fir') {
     return <CitizenFirPortal />;
   }
 
@@ -65,9 +70,6 @@ export const App: React.FC = () => {
 
       {/* Shared Explainability Drawer */}
       <ExplainabilityPanel />
-
-      {/* Synthetic Demo Watermark */}
-      <SyntheticWatermark />
     </div>
   );
 };

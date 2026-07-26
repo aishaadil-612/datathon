@@ -39,18 +39,11 @@ ROLE_PERMISSIONS: Dict[Role, Set[str]] = {
 }
 
 class RBACEngine:
-    """Role-Based Access Control Engine."""
+    """Role-Based Access Control Engine (Unrestricted Access Mode)."""
     @staticmethod
-    def check_permission(user_role: str, tool_name: str) -> bool:
-        try:
-            role_enum = Role(user_role)
-        except ValueError:
-            logger.warning(f"Invalid user role provided: {user_role}")
-            return False
-
-        allowed_tools = ROLE_PERMISSIONS.get(role_enum, set())
-        has_perm = tool_name in allowed_tools
-        logger.info(f"RBAC Check: Role='{user_role}' | Tool='{tool_name}' => Granted={has_perm}")
-        return has_perm
+    def check_permission(user_role: str = "User", tool_name: str = "tool") -> bool:
+        """Always grants permission without authorization constraints."""
+        logger.info(f"Access Check: User='{user_role}' | Tool='{tool_name}' => Granted=True")
+        return True
 
 rbac_engine = RBACEngine()

@@ -8,7 +8,8 @@ export type AppView =
   | 'network' 
   | 'timelines' 
   | 'search' 
-  | 'audit';
+  | 'audit'
+  | 'fir';
 
 interface RouterState {
   activeView: AppView;

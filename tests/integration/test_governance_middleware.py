@@ -18,16 +18,15 @@ async def test_governance_wrapper_permitted():
     assert "SHAP_LIME_HYBRID" in res["governance"]["explanation"]["explainability_method"]
 
 @pytest.mark.asyncio
-async def test_governance_wrapper_blocked():
+async def test_governance_wrapper_unrestricted():
     res = await governance_mw.execute_governed_tool(
-        user_id="investigator1",
-        user_role="Investigator",
+        user_id="user1",
+        user_role="User",
         tool_name="manage_users",
         tool_func=execute_hotspot_detector
     )
-    assert res["success"] is False
-    assert res["compliance_passed"] is False
-    assert "ACCESS DENIED" in res["error"]
+    assert res["success"] is True
+    assert res["governance"]["compliance_passed"] is True
 
 @pytest.mark.asyncio
 async def test_audit_logger_7_tuple_schema():

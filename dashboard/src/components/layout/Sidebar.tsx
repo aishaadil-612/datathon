@@ -5,7 +5,8 @@ import {
   LayoutDashboard,
   MapPin,
   Cpu,
-  Shield
+  Shield,
+  FileText
 } from 'lucide-react';
 import { useRouterStore, AppView } from '../../store/useRouterStore';
 import { useDashboardStore } from '../../store/useDashboardStore';
@@ -15,12 +16,13 @@ export const Sidebar: React.FC = () => {
   const { role } = useDashboardStore();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
-  // Left Sidebar Rail contains ONLY the 4 Core Platform Sections
+  // Left Sidebar Rail contains Platform Navigation
   const navItems: Array<{ id: AppView; label: string; icon: React.ReactNode }> = [
-    { id: 'iris', label: '01 — Ask IRIS Copilot', icon: <Sparkles className="w-5 h-5" /> },
-    { id: 'overview', label: '02 — Command Overview', icon: <LayoutDashboard className="w-5 h-5" /> },
-    { id: 'hotspots', label: '03 — Hotspot Intelligence', icon: <MapPin className="w-5 h-5" /> },
-    { id: 'inside-iris', label: '04 — Inside IRIS Trace', icon: <Cpu className="w-5 h-5" /> },
+    { id: 'iris', label: 'Ask IRIS Copilot', icon: <Sparkles className="w-5 h-5" /> },
+    { id: 'fir', label: 'Citizen E-FIR Portal', icon: <FileText className="w-5 h-5" /> },
+    { id: 'overview', label: 'Command Overview', icon: <LayoutDashboard className="w-5 h-5" /> },
+    { id: 'hotspots', label: 'Hotspot Intelligence', icon: <MapPin className="w-5 h-5" /> },
+    { id: 'inside-iris', label: 'Inside IRIS Trace', icon: <Cpu className="w-5 h-5" /> },
   ];
 
   return (

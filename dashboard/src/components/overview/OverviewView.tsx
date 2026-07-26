@@ -73,10 +73,13 @@ const assignedInvestigators = [
 ];
 
 export const OverviewView: React.FC = () => {
-  const { openExplainability, setSelectedCaseId } = useDashboardStore();
+  const { openExplainability, setSelectedCaseId, isBackendConnected, summaryData } = useDashboardStore();
   const { setActiveView } = useRouterStore();
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string | null>(null);
   const [activeSubTab, setActiveSubTab] = useState<'cases' | 'suspects' | 'evidence' | 'timeline'>('cases');
+
+  const totalFirsCount = summaryData?.metrics?.total_firs ?? 24;
+  const activeHotspotsCount = summaryData?.metrics?.active_hotspots ?? 3;
 
   const handleInsightClick = (insight: typeof mockInsights[0]) => {
     openExplainability({
@@ -101,10 +104,26 @@ export const OverviewView: React.FC = () => {
     <section id="section-overview" className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-[1700px] mx-auto select-none min-h-screen border-b border-[#22242D]">
       {/* Section Header Narrative Tag */}
       <div className="flex items-center justify-between pt-4">
-        <div className="flex items-center gap-2 text-xs font-mono font-extrabold text-[#CCFF00] bg-[#CCFF00]/10 px-3.5 py-1.5 rounded-full border border-[#CCFF00]/30">
-          <Layers className="w-4 h-4" />
-          <span>02 — COMMAND OVERVIEW</span>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 text-xs font-mono font-extrabold text-[#CCFF00] bg-[#CCFF00]/10 px-3.5 py-1.5 rounded-full border border-[#CCFF00]/30">
+            <Layers className="w-4 h-4" />
+            <span>02 — COMMAND OVERVIEW</span>
+          </div>
+
+          {/* Backend Status Indicator Pill */}
+          {isBackendConnected ? (
+            <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-full font-mono text-xs font-bold">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              FASTAPI GATEWAY ONLINE
+            </div>
+          ) : (
+            <div className="flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 text-amber-400 border border-amber-500/30 rounded-full font-mono text-xs font-bold">
+              <span className="w-2 h-2 rounded-full bg-amber-400" />
+              SIMULATION MODE (OFFLINE)
+            </div>
+          )}
         </div>
+
         <span className="text-xs sm:text-sm font-mono font-bold text-slate-600 dark:text-[#E2E8F0] hidden sm:block">
           Precinct Operational Metrics & Multi-Vector Intelligence Feed
         </span>
@@ -141,7 +160,7 @@ export const OverviewView: React.FC = () => {
 
           <div className="mt-4 flex items-baseline justify-between">
             <div className="font-display font-extrabold text-3xl sm:text-4xl text-[#0B0C0E] tracking-tight tabular-nums">
-              24
+              {totalFirsCount}
             </div>
             <div className="px-3 py-1 rounded-full bg-[#0B0C0E] text-[#8CBF26] text-xs font-extrabold flex items-center gap-1 font-mono shadow-sm">
               <TrendingUp className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -163,7 +182,7 @@ export const OverviewView: React.FC = () => {
               </div>
               <div>
                 <span className="text-sm font-extrabold text-[#0B0C0E] uppercase tracking-wider block">Open System Alerts</span>
-                <p className="text-xs text-[#0B0C0E] font-mono font-bold">2 Predicted Hotspots</p>
+                <p className="text-xs text-[#0B0C0E] font-mono font-bold">{activeHotspotsCount} Active Hotspots</p>
               </div>
             </div>
             <button
@@ -177,7 +196,7 @@ export const OverviewView: React.FC = () => {
 
           <div className="mt-4 flex items-baseline justify-between">
             <div className="font-display font-extrabold text-3xl sm:text-4xl text-[#0B0C0E] tracking-tight tabular-nums">
-              03
+              {String(activeHotspotsCount).padStart(2, '0')}
             </div>
             <div className="px-3 py-1 rounded-full bg-[#0B0C0E] text-[#FFB020] text-xs font-extrabold flex items-center gap-1 font-mono shadow-sm">
               <span>ACTIVE MONITORING</span>

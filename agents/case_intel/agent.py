@@ -11,7 +11,7 @@ logger = logging.getLogger("argus.agents.case_intel")
 class CaseIntelligenceAgent:
     """Agent #2: Case Intelligence Agent merging explicit relationships (Neo4j) + MO Feature Vector vector similarity."""
 
-    async def run(self, action: str, user_id: str, role: str, **kwargs) -> Dict[str, Any]:
+    async def run(self, action: str, user_id: str = "user1", role: str = "User", **kwargs) -> Dict[str, Any]:
         logger.info(f"Case Intelligence Agent executing action: '{action}' for User: '{user_id}'")
 
         if action == "network_analysis":

@@ -5,18 +5,47 @@ from typing import Dict, Any
 
 logger = logging.getLogger("argus.agents.fir_assistant.fir_drafter")
 
+import re
+
+OFFENSE_KEYWORDS = {
+    "cyber": [
+        "cyber", "bank", "otp", "app", "apk", "qr", "upi", "pin", "transaction",
+        "phishing", "link", "scam", "online", "fake call", "impersonat", "disappeared",
+        "account", "transfer", "card", "credit", "debit", "netbanking", "hacked",
+        "crypto", "hawala", "security verification", "buyer", "sold", "sale", "received a call"
+    ],
+    "theft": [
+        "theft", "stolen", "stole", "stolen vehicle", "burglary", "broken into",
+        "housebreak", "locked house", "gold", "jewelry", "watch", "laptop", "cash", "robbed"
+    ],
+    "robbery": [
+        "robbery", "extortion", "blackmail", "threaten", "at gunpoint", "knife",
+        "weapon", "snatching", "chain snatch"
+    ],
+    "assault": [
+        "assault", "attack", "beat", "beaten", "injured", "injury", "bleed",
+        "hit", "punched", "fight", "hurt"
+    ],
+    "women": [
+        "women", "harassment", "stalking", "stalker", "molest", "outrag", "abuse", "domestic"
+    ],
+    "missing": [
+        "missing", "kidnap", "abduct", "untraceable", "disappeared person"
+    ]
+}
+
 OFFENSE_MAPPINGS = {
     "cyber": {
         "category": "Cyber Crime & Financial Fraud",
         "cognizable": True,
-        "bns_sections": ["BNS Section 318 (Cheating)", "IT Act Section 66D (Cheating by Impersonation)"],
-        "ipc_sections": ["IPC Section 420 (Cheating)", "IT Act Section 66D"],
+        "bns_sections": ["BNS Section 318(4) (Cheating by Impersonation)", "IT Act Section 66D (Cheating using Computer Resource)"],
+        "ipc_sections": ["IPC Section 420 (Cheating & Dishonestly Inducing Delivery)", "IT Act Section 66D"],
         "specialized_unit": "Cyber Crime Investigation Cell"
     },
     "theft": {
         "category": "Property Theft & Burglary",
         "cognizable": True,
-        "bns_sections": ["BNS Section 303 (Theft)", "BNS Section 305 (Theft in Dwelling House)"],
+        "bns_sections": ["BNS Section 303(2) (Theft)", "BNS Section 305 (Theft in Dwelling House)"],
         "ipc_sections": ["IPC Section 379 (Theft)", "IPC Section 380"],
         "specialized_unit": "Anti-Theft Squad / Detective Department"
     },
@@ -57,16 +86,30 @@ async def execute_fir_drafter(intake_result: Dict[str, Any], station: str = "Cen
     """
     logger.info("Executing FIR Drafter tool")
     extracted = intake_result.get("extracted_entities", {})
-    narrative = extracted.get("narrative_summary", "").lower()
+    raw_text = intake_result.get("raw_complaint", "") or extracted.get("narrative_summary", "")
+    text_lower = (raw_text + " " + extracted.get("suspect_info", "")).lower()
 
-    # Determine crime category and legal sections
-    crime_type = "theft"
-    for key in OFFENSE_MAPPINGS:
-        if key in narrative or key in extracted.get("suspect_info", "").lower():
-            crime_type = key
-            break
+    # Determine crime category using multi-keyword scoring
+    crime_type = "cyber"
+    best_matches = 0
+
+    for category, keywords in OFFENSE_KEYWORDS.items():
+        count = sum(1 for kw in keywords if kw in text_lower)
+        if count > best_matches:
+            best_matches = count
+            crime_type = category
+
+    if best_matches == 0:
+        if any(w in text_lower for w in ["money", "account", "₹", "rs", "rupees", "bank", "upi"]):
+            crime_type = "cyber"
+        else:
+            crime_type = "theft"
 
     mapping = OFFENSE_MAPPINGS[crime_type]
+
+    # Extract financial loss amount
+    amt_match = re.search(r"(₹\s*[\d,]+|Rs\.?\s*[\d,]+|INR\s*[\d,]+|[\d,]+\s*rupees)", raw_text, re.IGNORECASE)
+    financial_loss = amt_match.group(1) if amt_match else extracted.get("financial_loss", "Unspecified Amount")
 
     draft_id = f"DRAFT-FIR-2026-{random.randint(1000, 9999)}"
     timestamp = time.strftime("%Y-%m-%d %H:%M:%S IST")
@@ -89,6 +132,7 @@ async def execute_fir_drafter(intake_result: Dict[str, Any], station: str = "Cen
         "incident_details": {
             "location": extracted.get("location", "Central District"),
             "time": extracted.get("incident_time", "Recent"),
+            "financial_loss": financial_loss,
             "narrative": extracted.get("narrative_summary", "Standard complaint report.")
         },
         "suspect_details": extracted.get("suspect_info", "Under Investigation"),

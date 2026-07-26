@@ -33,7 +33,7 @@ class FIRAssistantAgent:
     authenticity verification (duplicate check, fraud risk scoring), and officer action recommendation.
     """
 
-    async def run(self, action: str, user_id: str, role: str, **kwargs) -> Dict[str, Any]:
+    async def run(self, action: str, user_id: str = "user1", role: str = "User", **kwargs) -> Dict[str, Any]:
         logger.info(f"FIR Assistant Agent executing action: '{action}' for User: '{user_id}' ({role})")
 
         if action == "aadhaar_ocr":

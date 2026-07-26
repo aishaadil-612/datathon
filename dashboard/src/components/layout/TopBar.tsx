@@ -57,11 +57,12 @@ export const TopBar: React.FC = () => {
     }
   };
 
-  const primaryTabs: { id: AppView; label: string; number: string }[] = [
-    { id: 'iris', label: 'Ask IRIS', number: '01' },
-    { id: 'overview', label: 'Command Overview', number: '02' },
-    { id: 'hotspots', label: 'Hotspot Intelligence', number: '03' },
-    { id: 'inside-iris', label: 'Inside IRIS', number: '04' },
+  const primaryTabs: { id: AppView; label: string }[] = [
+    { id: 'iris', label: 'Ask IRIS' },
+    { id: 'fir', label: 'Citizen E-FIR' },
+    { id: 'overview', label: 'Overview' },
+    { id: 'hotspots', label: 'Hotspots' },
+    { id: 'inside-iris', label: 'Inside IRIS' },
   ];
 
   const investigatorTools: { id: AppView; label: string; icon: React.ReactNode; desc: string }[] = [
@@ -73,81 +74,68 @@ export const TopBar: React.FC = () => {
 
   return (
     <>
-      <header className="bg-[#0B0C0E]/95 backdrop-blur-md border-b border-[#22242D] sticky top-0 z-40 select-none">
-        {/* Upper Header Row */}
+      <header className="bg-[#0B0C0E]/95 theme-card backdrop-blur-md border-b border-[#22242D] theme-border sticky top-0 z-40 select-none">
         <div className="h-16 px-4 lg:px-6 flex items-center justify-between gap-4">
-          {/* Left: Brand Identity with CrimeLens Logo */}
+          {/* Left: Brand Logo */}
           <div className="flex items-center gap-3 shrink-0">
             <button onClick={() => setActiveView('iris')} className="flex items-center gap-3 text-left">
               <CrimeLensLogo size="md" showWordmark={true} />
-              <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-[#CCFF00]/10 text-[#CCFF00] text-xs font-mono border border-[#CCFF00]/20 font-bold">
-                v3.2 AI
-              </span>
             </button>
           </div>
 
-          {/* Center: Global Intelligent Search Bar */}
-          <form onSubmit={handleSearchSubmit} className="flex-1 max-w-md mx-2 hidden md:block">
-            <div className="relative flex items-center">
-              <Search className="w-4 h-4 absolute left-3.5 text-[#CBD5E1] pointer-events-none" />
-              <input
-                type="text"
-                value={globalSearchQuery}
-                onChange={(e) => setGlobalSearchQuery(e.target.value)}
-                placeholder="Search cases, suspects, vehicles, locations…"
-                className="w-full pl-10 pr-8 py-2 bg-[#14151B] border border-[#22242D] rounded-full text-xs sm:text-sm text-[#FFFFFF] placeholder:text-[#CBD5E1]/60 focus:outline-none focus:border-[#CCFF00] focus:ring-1 focus:ring-[#CCFF00]/30 transition-all font-sans"
-              />
-              {globalSearchQuery && (
+          {/* Center: Minimal Navigation Tabs */}
+          <nav className="hidden md:flex items-center gap-1.5 bg-[#14151B]/80 theme-card p-1 rounded-full border border-[#22242D] theme-border">
+            {primaryTabs.map((tab) => {
+              const isActive = activeView === tab.id;
+              return (
                 <button
-                  type="button"
-                  onClick={() => setGlobalSearchQuery('')}
-                  className="absolute right-3.5 text-xs text-[#CBD5E1] hover:text-[#FFFFFF]"
+                  key={tab.id}
+                  onClick={() => setActiveView(tab.id)}
+                  className={`relative px-4 py-1.5 rounded-full text-xs font-sans font-semibold transition-all ${
+                    isActive
+                      ? 'bg-[#CCFF00] text-slate-950 font-extrabold shadow-sm'
+                      : 'text-[#CBD5E1] theme-text hover:text-[#FFFFFF] hover:bg-[#1C1E26]'
+                  }`}
                 >
-                  ×
+                  <span>{tab.label}</span>
                 </button>
-              )}
-            </div>
-          </form>
+              );
+            })}
+          </nav>
 
-          {/* Right Controls: Quick Action +, Notification Bell, Tools Dropdown, Role Switcher */}
-          <div className="flex items-center gap-2.5 shrink-0">
-            {/* Live Command Indicator */}
-            <div className="hidden xl:flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-xs font-mono">
-              <Radio className="w-3.5 h-3.5 animate-pulse text-emerald-400" />
-              <span className="font-semibold">{t.liveBadge}</span>
-            </div>
-
-            {/* Circular Quick Action (+) Button */}
+          {/* Right Controls: Quick Action, Tools, Notifications, Theme, Role */}
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Quick Action (+) */}
             <button
               onClick={() => setShowQuickAction(true)}
-              className="w-9 h-9 rounded-full bg-[#CCFF00] text-slate-950 hover:bg-[#b8ef00] flex items-center justify-center font-bold shadow-glow-teal transition-all hover:scale-105 active:scale-95"
+              className="w-8 h-8 rounded-full bg-[#CCFF00] text-slate-950 hover:bg-[#b8ef00] flex items-center justify-center font-bold transition-all hover:scale-105"
               title="File New Case / Quick Action"
             >
-              <Plus className="w-5 h-5 stroke-[2.5]" />
+              <Plus className="w-4 h-4 stroke-[2.5]" />
             </button>
 
-            {/* Circular Notification Bell Button */}
+            {/* Notification Bell */}
             <div className="relative">
               <button
                 onClick={() => setShowAlertMenu(!showAlertMenu)}
-                className="w-9 h-9 rounded-full bg-[#14151B] hover:bg-[#1B1C24] border border-[#22242D] text-[#FFFFFF] flex items-center justify-center relative transition-colors"
+                className="w-8 h-8 rounded-full bg-[#14151B] theme-card hover:bg-[#1B1C24] border border-[#22242D] theme-border text-[#FFFFFF] flex items-center justify-center relative transition-colors"
                 title="Alerts & Notifications"
               >
-                <Bell className="w-4 h-4 text-[#CBD5E1] hover:text-[#FFFFFF]" />
+                <Bell className="w-3.5 h-3.5 text-[#CBD5E1]" />
                 {alertCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-rose-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center animate-pulse">
+                  <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-rose-500 text-white rounded-full text-[9px] font-bold flex items-center justify-center animate-pulse">
                     {alertCount}
                   </span>
                 )}
               </button>
 
               {showAlertMenu && (
-                <div className="absolute right-0 mt-2 w-80 bg-[#14151B] border border-[#22242D] rounded-2xl shadow-2xl py-2 z-50 text-xs space-y-1">
-                  <div className="px-3 py-2 flex items-center justify-between border-b border-[#22242D]">
-                    <span className="font-bold text-[#FFFFFF]">CrimeLens System Alerts</span>
+                <div className="absolute right-0 mt-2 w-80 bg-[#14151B] theme-card border border-[#22242D] theme-border rounded-2xl shadow-2xl py-2 z-50 text-xs space-y-1">
+                  <div className="px-3 py-2 flex items-center justify-between border-b border-[#22242D] theme-border">
+                    <span className="font-bold text-[#FFFFFF] theme-text">System Alerts</span>
                     {alertCount > 0 && (
                       <button onClick={clearAlerts} className="text-[10px] text-[#CCFF00] hover:underline font-bold">
-                        Mark all read
+                        Clear
                       </button>
                     )}
                   </div>
@@ -159,47 +147,33 @@ export const TopBar: React.FC = () => {
                         setShowAlertMenu(false);
                       }}
                     >
-                      <span className="text-rose-400 font-semibold block">Emerging Hotspot Warning</span>
-                      <span className="text-[#CBD5E1] text-[11px]">
-                        88% risk score calculated for Hoodi ORR Corridor next 30 days.
-                      </span>
-                    </div>
-                    <div
-                      className="p-3 hover:bg-[#1B1C24] cursor-pointer transition-colors"
-                      onClick={() => {
-                        setActiveView('network');
-                        setShowAlertMenu(false);
-                      }}
-                    >
-                      <span className="text-amber-400 font-semibold block">Vehicle Match Alert</span>
-                      <span className="text-[#CBD5E1] text-[11px]">
-                        Silver SUV KA-03-MN-4921 linked across 4 active FIRs.
-                      </span>
+                      <span className="text-rose-400 font-semibold block">Hotspot Alert</span>
+                      <span className="text-[#CBD5E1] text-[11px]">88% risk score calculated for Hoodi ORR.</span>
                     </div>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Investigator Tools Dropdown Menu */}
+            {/* Tools Dropdown */}
             <div className="relative">
               <button
                 onClick={() => setShowToolsMenu(!showToolsMenu)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 border rounded-full text-xs font-mono transition-colors font-bold ${
+                className={`flex items-center gap-1 px-3 py-1.5 border rounded-full text-xs font-sans font-semibold transition-colors ${
                   ['network', 'timelines', 'search', 'audit'].includes(activeView)
-                    ? 'bg-[#CCFF00]/15 text-[#CCFF00] border-[#CCFF00]/40'
-                    : 'bg-[#14151B] hover:bg-[#1B1C24] border-[#22242D] text-[#FFFFFF]'
+                    ? 'bg-[#CCFF00]/15 text-[#CCFF00] border-[#CCFF00]/40 font-bold'
+                    : 'bg-[#14151B] theme-card hover:bg-[#1B1C24] border-[#22242D] theme-border text-[#FFFFFF] theme-text'
                 }`}
               >
                 <Sparkles className="w-3.5 h-3.5 text-[#CCFF00]" />
-                <span className="hidden sm:inline">Investigator Tools</span>
+                <span className="hidden sm:inline">Tools</span>
                 <ChevronDown className="w-3 h-3 text-[#CBD5E1]" />
               </button>
 
               {showToolsMenu && (
-                <div className="absolute right-0 mt-2 w-64 bg-[#14151B] border border-[#22242D] rounded-2xl shadow-2xl py-2 z-50 text-xs">
-                  <div className="px-3 py-1.5 text-[10px] font-mono text-[#CBD5E1] uppercase border-b border-[#22242D] font-bold">
-                    Deep Analysis Modules
+                <div className="absolute right-0 mt-2 w-60 bg-[#14151B] theme-card border border-[#22242D] theme-border rounded-2xl shadow-2xl py-2 z-50 text-xs">
+                  <div className="px-3 py-1 text-[10px] font-mono text-[#CBD5E1] uppercase border-b border-[#22242D] theme-border font-bold">
+                    Analysis Modules
                   </div>
                   {investigatorTools.map((tool) => (
                     <button
@@ -208,12 +182,11 @@ export const TopBar: React.FC = () => {
                         setActiveView(tool.id);
                         setShowToolsMenu(false);
                       }}
-                      className="w-full text-left px-3 py-2.5 hover:bg-[#1B1C24] transition-colors flex items-start gap-2.5"
+                      className="w-full text-left px-3 py-2 hover:bg-[#1B1C24] transition-colors flex items-center gap-2.5"
                     >
-                      <div className="mt-0.5">{tool.icon}</div>
+                      <div>{tool.icon}</div>
                       <div>
-                        <span className="font-bold text-[#FFFFFF] block text-xs sm:text-sm">{tool.label}</span>
-                        <span className="text-[11px] text-[#CBD5E1] block">{tool.desc}</span>
+                        <span className="font-bold text-[#FFFFFF] theme-text block text-xs">{tool.label}</span>
                       </div>
                     </button>
                   ))}
@@ -221,104 +194,49 @@ export const TopBar: React.FC = () => {
               )}
             </div>
 
-            {/* Theme Switcher Toggle Button (Dark / Light Theme) */}
+            {/* Theme Toggle */}
             <button
               onClick={toggleThemeMode}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#14151B] theme-card hover:bg-[#1B1C24] border border-[#22242D] theme-border rounded-full text-xs font-mono font-bold text-[#FFFFFF] theme-text transition-all"
-              title={`Switch to ${themeMode === 'dark' ? 'Light' : 'Dark'} Theme`}
+              className="p-2 bg-[#14151B] theme-card hover:bg-[#1B1C24] border border-[#22242D] theme-border rounded-full text-[#FFFFFF] theme-text transition-all"
+              title={`Switch to ${themeMode === 'dark' ? 'Light' : 'Dark'} Mode`}
             >
               {themeMode === 'dark' ? (
-                <>
-                  <Sun className="w-3.5 h-3.5 text-amber-400" />
-                  <span className="hidden md:inline">Light Mode</span>
-                </>
+                <Sun className="w-4 h-4 text-amber-400" />
               ) : (
-                <>
-                  <Moon className="w-3.5 h-3.5 text-indigo-500" />
-                  <span className="hidden md:inline">Dark Mode</span>
-                </>
+                <Moon className="w-4 h-4 text-indigo-500" />
               )}
-            </button>
-
-            {/* Language Toggle */}
-            <button
-              onClick={() => setLanguage(language === 'en' ? 'kn' : 'en')}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#14151B] hover:bg-[#1B1C24] border border-[#22242D] rounded-full text-xs font-mono text-[#FFFFFF] font-bold transition-colors"
-              title="Switch Language"
-            >
-              <Globe className="w-3.5 h-3.5 text-[#CCFF00]" />
-              <span>{t.langToggle}</span>
             </button>
 
             {/* Role Switcher */}
             <div className="relative">
               <button
                 onClick={() => setShowRoleMenu(!showRoleMenu)}
-                className="flex items-center gap-2 px-3 py-1.5 bg-[#14151B] hover:bg-[#1B1C24] border border-[#22242D] rounded-full text-xs font-semibold text-[#FFFFFF] transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#14151B] theme-card hover:bg-[#1B1C24] border border-[#22242D] theme-border rounded-full text-xs font-semibold text-[#FFFFFF] theme-text transition-colors"
               >
                 <User className="w-3.5 h-3.5 text-amber-400" />
                 <span className="capitalize hidden sm:inline">{role}</span>
-                <ChevronDown className="w-3 h-3 text-[#CBD5E1]" />
               </button>
 
               {showRoleMenu && (
-                <div className="absolute right-0 mt-2 w-48 bg-[#14151B] border border-[#22242D] rounded-2xl shadow-2xl py-1 z-50">
-                  <div className="px-3 py-1.5 text-[10px] font-mono text-[#CBD5E1] uppercase border-b border-[#22242D] font-bold">
-                    {t.roleLabel}
-                  </div>
+                <div className="absolute right-0 mt-2 w-44 bg-[#14151B] theme-card border border-[#22242D] theme-border rounded-2xl shadow-2xl py-1 z-50">
                   <button
                     onClick={() => handleRoleChange('investigator')}
-                    className="w-full text-left px-3 py-2 text-xs flex items-center justify-between text-[#FFFFFF] hover:bg-[#1B1C24] transition-colors"
+                    className="w-full text-left px-3 py-2 text-xs flex items-center justify-between text-[#FFFFFF] theme-text hover:bg-[#1B1C24] transition-colors"
                   >
-                    <span>{t.roleInvestigator}</span>
+                    <span>Investigator</span>
                     {role === 'investigator' && <Check className="w-3.5 h-3.5 text-[#CCFF00]" />}
                   </button>
                   <button
                     onClick={() => handleRoleChange('supervisor')}
-                    className="w-full text-left px-3 py-2 text-xs flex items-center justify-between text-[#FFFFFF] hover:bg-[#1B1C24] transition-colors"
+                    className="w-full text-left px-3 py-2 text-xs flex items-center justify-between text-[#FFFFFF] theme-text hover:bg-[#1B1C24] transition-colors"
                   >
-                    <span>{t.roleSupervisor}</span>
+                    <span>Supervisor</span>
                     {role === 'supervisor' && <Check className="w-3.5 h-3.5 text-[#CCFF00]" />}
-                  </button>
-                  <button
-                    onClick={() => handleRoleChange('admin')}
-                    className="w-full text-left px-3 py-2 text-xs flex items-center justify-between text-[#FFFFFF] hover:bg-[#1B1C24] transition-colors"
-                  >
-                    <span>{t.roleAdmin}</span>
-                    {role === 'admin' && <Check className="w-3.5 h-3.5 text-[#CCFF00]" />}
                   </button>
                 </div>
               )}
             </div>
           </div>
-        </div>
-
-        {/* Lower Navigation Row: Primary Section View Tabs */}
-        <div className="px-4 lg:px-6 flex items-center justify-center gap-2 border-t border-[#22242D]/60 py-1.5 overflow-x-auto scrollbar-none">
-          {primaryTabs.map((tab) => {
-            const isActive = activeView === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveView(tab.id)}
-                className={`relative px-4 py-1.5 rounded-full text-xs sm:text-sm font-mono transition-all flex items-center gap-2 ${
-                  isActive
-                    ? 'bg-[#CCFF00]/15 text-[#CCFF00] border border-[#CCFF00]/40 font-extrabold'
-                    : 'text-[#CBD5E1] hover:text-[#FFFFFF] hover:bg-[#14151B]'
-                }`}
-              >
-                <span className="text-[11px] opacity-80">{tab.number}</span>
-                <span>{tab.label}</span>
-                {isActive && (
-                  <motion.div
-                    layoutId="activeTopNavDot"
-                    className="w-1.5 h-1.5 rounded-full bg-[#CCFF00]"
-                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                  />
-                )}
-              </button>
-            );
-          })}
         </div>
       </header>
 

@@ -29,6 +29,8 @@ interface IrisState {
   isQueryLoading: boolean;
   activeResponse: CopilotResponse | null;
   history: CopilotResponse[];
+  sessionId: string;
+  lastActivityTimestamp: number;
   
   // Section 4 Inside IRIS Replay & Timeline Scrubber State
   selectedTrace: CopilotResponse | null;
@@ -40,6 +42,7 @@ interface IrisState {
   // Actions
   setCurrentPrompt: (prompt: string) => void;
   submitQuery: (prompt: string, role?: string) => Promise<CopilotResponse>;
+  clearSession: () => void;
   setSelectedTrace: (trace: CopilotResponse) => void;
   setTimelineIndex: (index: number) => void;
   setIsPlaying: (isPlaying: boolean) => void;
@@ -154,19 +157,30 @@ export const fallbackQueries: CopilotResponse[] = [
   }
 ];
 
+const SESSION_TTL_MS = 3600000; // 1-hour session expiration TTL
+
 export const useIrisStore = create<IrisState>((set, get) => ({
   currentPrompt: '',
   isQueryLoading: false,
-  activeResponse: fallbackQueries[0],
-  history: fallbackQueries,
+  activeResponse: null,
+  history: [],
+  sessionId: `sess-${Date.now()}`,
+  lastActivityTimestamp: Date.now(),
 
-  selectedTrace: fallbackQueries[0],
-  timelineIndex: fallbackQueries[0].reasoning_steps.length - 1,
+  selectedTrace: null,
+  timelineIndex: 0,
   isPlaying: false,
   playbackSpeed: 1,
   isCinematicMode: false,
 
   setCurrentPrompt: (currentPrompt) => set({ currentPrompt }),
+
+  clearSession: () => set({
+    history: [],
+    activeResponse: null,
+    sessionId: `sess-${Date.now()}`,
+    lastActivityTimestamp: Date.now()
+  }),
 
   setSelectedTrace: (selectedTrace) => set({
     selectedTrace,
@@ -180,7 +194,26 @@ export const useIrisStore = create<IrisState>((set, get) => ({
   toggleCinematicMode: () => set((state) => ({ isCinematicMode: !state.isCinematicMode })),
 
   submitQuery: async (prompt: string, role: string = 'Investigator') => {
-    set({ isQueryLoading: true, currentPrompt: prompt });
+    const currentState = get();
+    const now = Date.now();
+    let currentSessionId = currentState.sessionId;
+    let currentHistory = currentState.history;
+
+    // 1-Hour Session Memory Expiration Check
+    if (now - currentState.lastActivityTimestamp > SESSION_TTL_MS) {
+      console.info("Session expired after 1 hour of inactivity. Resetting session history.");
+      currentSessionId = `sess-${now}`;
+      currentHistory = [];
+    }
+
+    set({
+      isQueryLoading: true,
+      currentPrompt: '',
+      sessionId: currentSessionId,
+      lastActivityTimestamp: now,
+      history: currentHistory
+    });
+
     const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:8000';
 
     try {
@@ -191,7 +224,7 @@ export const useIrisStore = create<IrisState>((set, get) => ({
           user_id: "investigator_user_1",
           role: role,
           prompt: prompt,
-          session_id: `sess-${Date.now()}`
+          session_id: currentSessionId
         })
       });
 
@@ -199,7 +232,7 @@ export const useIrisStore = create<IrisState>((set, get) => ({
       const data = await res.json();
 
       const newResponse: CopilotResponse = {
-        session_id: data.session_id || `sess-${Date.now()}`,
+        session_id: currentSessionId,
         intent: data.intent || "CASE_INTEL",
         prompt: prompt,
         response: data.response || "No response generated.",
@@ -219,10 +252,11 @@ export const useIrisStore = create<IrisState>((set, get) => ({
       set((state) => ({
         isQueryLoading: false,
         activeResponse: newResponse,
-        history: [newResponse, ...state.history],
+        history: [...state.history, newResponse],
         selectedTrace: newResponse,
         timelineIndex: 0,
-        isPlaying: true
+        isPlaying: true,
+        lastActivityTimestamp: Date.now()
       }));
 
       return newResponse;
@@ -240,16 +274,23 @@ export const useIrisStore = create<IrisState>((set, get) => ({
         response: `Chief Detective V. R. Rao's Assessment: Analyzing '${prompt}' against local intelligence records. Identified matching modus operandi patterns across active Whitefield and Indiranagar sub-division FIR cases.`
       };
 
+      const fallbackTurn: CopilotResponse = {
+        ...matchedFallback,
+        session_id: currentSessionId,
+        prompt: prompt
+      };
+
       set((state) => ({
         isQueryLoading: false,
-        activeResponse: matchedFallback,
-        history: [matchedFallback, ...state.history.filter(h => h.session_id !== matchedFallback.session_id)],
-        selectedTrace: matchedFallback,
+        activeResponse: fallbackTurn,
+        history: [...state.history, fallbackTurn],
+        selectedTrace: fallbackTurn,
         timelineIndex: 0,
-        isPlaying: true
+        isPlaying: true,
+        lastActivityTimestamp: Date.now()
       }));
 
-      return matchedFallback;
+      return fallbackTurn;
     }
   }
 }));
