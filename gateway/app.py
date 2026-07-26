@@ -54,8 +54,8 @@ if USE_FASTAPI:
         allow_origins=ALLOWED_ORIGINS,
         allow_origin_regex=CATALYST_ORIGIN_REGEX,
         allow_credentials=False,
-        allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allow_headers=["Content-Type", "Authorization", "Accept", "X-Requested-With"],
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
 
 
