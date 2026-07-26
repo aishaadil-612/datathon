@@ -9,7 +9,7 @@
 # VITE_API_BASE_URL is a public API endpoint baked into the client bundle by Vite design.
 # SECRETS_SCAN_OMIT_KEYS tells Netlify's scanner not to flag it as a leaked secret.
 [build.environment]
-  VITE_API_BASE_URL = "https://crimelens-ksp.onrender.com"
+  VITE_API_BASE_URL = "https://datathon-ziw6.onrender.com"
   SECRETS_SCAN_OMIT_KEYS = "VITE_API_BASE_URL"
 
 # SPA Single Page Application Client Routing Redirects

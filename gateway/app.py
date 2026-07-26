@@ -38,6 +38,7 @@ if USE_FASTAPI:
     # Using ["*"] with credentials=True is invalid per RFC and browsers reject it.
     ALLOWED_ORIGINS = [
         "https://crimelens-ksp.netlify.app",
+        "https://datathon-ziw6.onrender.com",
         "http://localhost:3000",
         "http://localhost:5173",
         "http://127.0.0.1:3000",
