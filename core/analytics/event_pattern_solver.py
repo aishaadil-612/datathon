@@ -21,25 +21,37 @@ class EventPatternSolver:
         self.solved_cases: List[Dict[str, Any]] = self._load_compressed_events()
 
     def _load_compressed_events(self) -> List[Dict[str, Any]]:
+        import gc
+        max_ram_cases = int(os.getenv("MAX_IN_MEMORY_CASES", "1000"))
+
         if os.path.exists(self.gz_file):
             try:
                 with gzip.open(self.gz_file, "rt", encoding="utf-8") as gz:
                     data = json.load(gz)
                     cases = data.get("cases", [])
-                    logger.info(f"Loaded {len(cases):,} compressed event resolution chains from '{self.gz_file}'.")
+                    if len(cases) > max_ram_cases:
+                        logger.info(f"Loaded {len(cases):,} event patterns; capping to top {max_ram_cases:,} for 512MB RAM cloud deployment.")
+                        cases = cases[:max_ram_cases]
+                    else:
+                        logger.info(f"Loaded {len(cases):,} compressed event resolution chains.")
+                    del data
+                    gc.collect()
                     return cases
             except Exception as e:
                 logger.error(f"Error loading compressed GZ event patterns: {e}")
 
-        # Fallback to cases_db_20000.json or cases_db_1000.json if GZ not yet built
-        for fname in ["cases_db_20000.json", "cases_db_1000.json"]:
+        # Fallback to cases_db_1000.json or cases_db_20000.json if GZ not yet built
+        for fname in ["cases_db_1000.json", "cases_db_20000.json"]:
             fpath = os.path.join(self.data_dir, fname)
             if os.path.exists(fpath):
                 try:
                     with open(fpath, "r", encoding="utf-8") as f:
                         data = json.load(f)
-                        logger.info(f"Fallback loaded {len(data.get('firs', [])):,} cases from '{fpath}'.")
-                        return data.get("firs", [])
+                        cases = data.get("firs", [])[:max_ram_cases]
+                        logger.info(f"Fallback loaded {len(cases):,} cases from '{fpath}'.")
+                        del data
+                        gc.collect()
+                        return cases
                 except Exception:
                     pass
 
