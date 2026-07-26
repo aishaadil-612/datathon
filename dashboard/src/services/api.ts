@@ -1,6 +1,6 @@
 import { FIRRecord, HotspotZone, GraphEntity, GraphRelationship } from '../types';
 
-const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || 'https://datathon-ziw6.onrender.com';
+const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || (import.meta as any).env?.VITE_API_URL || 'https://datathon-ziw6.onrender.com';
 
 export interface HealthResponse {
   app: string;

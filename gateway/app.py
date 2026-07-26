@@ -34,8 +34,7 @@ if USE_FASTAPI:
         version="1.0.0"
     )
 
-    # CORS must list explicit origins when allow_credentials=True.
-    # Using ["*"] with credentials=True is invalid per RFC and browsers reject it.
+    # CORS configuration for development, Netlify, Render, and Zoho Catalyst
     ALLOWED_ORIGINS = [
         "https://crimelens-ksp.netlify.app",
         "https://datathon-ziw6.onrender.com",
@@ -43,11 +42,17 @@ if USE_FASTAPI:
         "http://localhost:5173",
         "http://127.0.0.1:3000",
         "http://127.0.0.1:5173",
+        # Zoho Catalyst Web Client Hosting Development URL
+        "https://crimelens-60080209740.development.catalystserverless.in",
     ]
+
+    # Regex pattern to match any Zoho Catalyst server subdomains dynamically
+    CATALYST_ORIGIN_REGEX = r"https://.*\.catalystserverless\.in|https://.*\.catalystserver\.com|https://.*\.zohocatalyst\.com|https://.*\.catalyst\.zoho\.com"
 
     app.add_middleware(
         CORSMiddleware,
         allow_origins=ALLOWED_ORIGINS,
+        allow_origin_regex=CATALYST_ORIGIN_REGEX,
         allow_credentials=False,
         allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         allow_headers=["Content-Type", "Authorization", "Accept", "X-Requested-With"],

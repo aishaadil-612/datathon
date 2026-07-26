@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:catalyst": "tsc && vite build && node scripts/package-catalyst.cjs",
+    "package:catalyst": "node scripts/package-catalyst.cjs",
     "lint": "tsc --noEmit",
     "preview": "vite preview"
   },

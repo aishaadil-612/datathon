@@ -28,6 +28,7 @@ build/
 
 # Logs & Temporary files
 *.log
+*.zip
 .tmp/
 .DS_Store
 Thumbs.db

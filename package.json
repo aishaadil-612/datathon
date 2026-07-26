@@ -4,6 +4,7 @@
   "private": true,
   "description": "CrimeLens - SCRB Karnataka AI Crime Intelligence Platform",
   "scripts": {
-    "build": "npm run build --prefix dashboard"
+    "build": "npm run build --prefix dashboard",
+    "build:catalyst": "npm run build:catalyst --prefix dashboard"
   }
 }

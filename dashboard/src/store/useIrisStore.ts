@@ -214,7 +214,7 @@ export const useIrisStore = create<IrisState>((set, get) => ({
       history: currentHistory
     });
 
-    const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || 'https://datathon-ziw6.onrender.com';
+    const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || (import.meta as any).env?.VITE_API_URL || 'https://datathon-ziw6.onrender.com';
 
     try {
       const res = await fetch(`${API_BASE}/api/v1/copilot/query`, {
