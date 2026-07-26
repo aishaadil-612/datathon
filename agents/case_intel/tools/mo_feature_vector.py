@@ -78,10 +78,10 @@ async def execute_mo_feature_vector(fir_id: str = "FIR-2026-001") -> Dict[str, A
 
     return {
         "target_fir": fir_id,
-        "target_mo_vector": target_case["feature_vector"],
-        "target_entry_method": target_case["entry_method"],
-        "target_weapon": target_case["weapon_used"],
+        "target_mo_vector": target_case["feature_vector"] if target_case else [0.8, 0.5, 0.7, 0.3, 0.9],
+        "target_entry_method": target_case["entry_method"] if target_case else "entry",
+        "target_weapon": target_case["weapon_used"] if target_case else "tool",
         "vector_dimensions": ["entry_method", "time_of_day", "target_type", "weapon_type", "behavioral_pattern"],
-        "similar_cases": similar_matches,
+        "similar_cases": similar_matches[:10],
         "top_match_fir": similar_matches[0]["fir_id"] if similar_matches else None
     }

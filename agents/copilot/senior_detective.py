@@ -117,21 +117,24 @@ class SeniorDetectiveAgent:
 
     def match_crime_patterns(self, prompt: str, tool_result: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
-        Cross-references query prompt & tool outputs against the 1,000+ solved cases knowledge bank.
+        Cross-references query prompt & tool outputs against the solved cases knowledge bank.
         """
         prompt_lower = prompt.lower()
         matched_patterns = []
 
-        for case in self.historical_cases_bank:
+        # Only evaluate against curated pattern bank (top 150)
+        search_bank = self.historical_cases_bank[:150]
+        
+        # Build lightweight summary string for matching from top tool results
+        similar_cases = tool_result.get("data", {}).get("similar_cases", [])[:5]
+        data_str = (prompt_lower + " " + str(similar_cases)).lower()
+
+        for case in search_bank:
             match_score = 0
-            for indicator in case["common_indicators"]:
+            for indicator in case.get("common_indicators", []):
                 if indicator in prompt_lower:
-                    match_score += 1
-            
-            # Additional signal matching from tool payload
-            data_str = str(tool_result.get("data", {})).lower()
-            for indicator in case["common_indicators"]:
-                if indicator in data_str:
+                    match_score += 1.0
+                elif indicator in data_str:
                     match_score += 0.5
 
             if match_score >= 1.0:
