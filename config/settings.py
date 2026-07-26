@@ -5,7 +5,7 @@ from typing import Optional
 try:
     from dotenv import load_dotenv
     env_path = Path(__file__).resolve().parent.parent / ".env"
-    load_dotenv(dotenv_path=env_path, override=True)
+    load_dotenv(dotenv_path=env_path, override=False)
 except ImportError:
     pass
 
@@ -39,8 +39,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 class Settings(BaseSettings):
     ENV: str = Field("development")
     DEBUG: bool = Field(True)
-    PORT: int = Field(8000)
-    HOST: str = Field("0.0.0.0")
+    PORT: int = int(os.getenv("PORT", "8000"))
+    HOST: str = os.getenv("HOST", "0.0.0.0")
     APP_NAME: str = Field("ARGUS - Intelligence & Investigation Platform")
 
     # LLM Settings
