@@ -424,5 +424,17 @@ class EventPatternSolver:
             "simple_victim_assistance_plan": simple_victim_help
         }
 
-event_pattern_solver = EventPatternSolver()
+_event_pattern_solver_instance = None
 
+def _get_event_pattern_solver():
+    global _event_pattern_solver_instance
+    if _event_pattern_solver_instance is None:
+        _event_pattern_solver_instance = EventPatternSolver()
+    return _event_pattern_solver_instance
+
+# Backwards-compatible alias - only instantiated on first access
+class _LazySolver:
+    def __getattr__(self, name):
+        return getattr(_get_event_pattern_solver(), name)
+
+event_pattern_solver = _LazySolver()
