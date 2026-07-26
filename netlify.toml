@@ -4,9 +4,16 @@
   base = "dashboard"
   command = "npm run build"
   publish = "dist"
+  environment = { VITE_API_BASE_URL = "https://crimelens-ksp.onrender.com" }
 
 # SPA Single Page Application Client Routing Redirects
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+# Secrets scanning exemption
+# VITE_API_BASE_URL is a public API endpoint URL intentionally baked into
+# the client-side JavaScript bundle — it is not a secret credential.
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "VITE_API_BASE_URL"
