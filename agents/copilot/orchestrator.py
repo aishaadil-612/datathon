@@ -47,7 +47,10 @@ class QueryRouterAgent:
             return "FIR_ASSISTANT"
         elif any(k in prompt_lower for k in ["hotspot", "density", "cluster", "risk score", "forecast", "prediction"]):
             return "ANALYTICS"
-        elif any(k in prompt_lower for k in ["network", "associate", "suspect", "similarity", "timeline", "modus operandi", "mo vector"]):
+        elif any(k in prompt_lower for k in [
+            "network", "associate", "suspect", "similarity", "timeline", "modus operandi", "mo vector",
+            "plate", "vehicle", "car", "suv", "registration", "anpr", "common vehicle", "license plate", "vehicle plate"
+        ]):
             return "CASE_INTEL"
         elif any(k in prompt_lower for k in ["graph", "cypher", "nodes", "relationships"]):
             return "NL2CYPHER"
